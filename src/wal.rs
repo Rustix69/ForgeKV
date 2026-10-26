@@ -1,6 +1,6 @@
 //! Write-ahead log: record encoding, appending, and replay.
 //!
-//! WAL payload (PLAN.md §3.2), inside a [`crate::logfile`] frame:
+//! WAL payload (`docs/FORMATS.md`, "WAL record payload"), inside a [`crate::logfile`] frame:
 //! ```text
 //! type u8 (1 = Put, 2 = Delete) | key_len u32 | key | [val_len u32 | value]   (Put only)
 //! ```
@@ -174,7 +174,7 @@ pub struct Replay {
 /// Read a WAL from `r`, calling `apply` for each valid record in order.
 ///
 /// Never modifies anything: classification completes before the caller
-/// decides what to keep (PLAN.md §3.3). In `Strict` mode, any corruption is an
+/// decides what to keep (`docs/FORMATS.md`, "Record log"). In `Strict` mode, any corruption is an
 /// error and `apply` may already have seen earlier records, so the caller must
 /// discard its state on `Err`.
 pub fn replay<R: Read>(

@@ -1,4 +1,4 @@
-//! A minimal JSON value and pretty-printer (PLAN §4: no serde). Object keys
+//! A minimal JSON value and pretty-printer (no serde dependency). Object keys
 //! keep insertion order so result files diff cleanly.
 
 #[derive(Debug, Clone, PartialEq)]

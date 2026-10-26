@@ -1,6 +1,6 @@
 //! Checksummed, append-only record log. Used by the WAL (and, later, the manifest).
 //!
-//! Format version 2 (PLAN.md §3.1), all integers little-endian:
+//! Format version 2 (`docs/FORMATS.md`, "Record log"), all integers little-endian:
 //! ```text
 //! file header (16 B): magic[8] = "FKVLOG\0\1" | kind u8 | version u8 = 2 | reserved[6] = 0
 //! frame header (12 B): len u32 | header_crc u32 | payload_crc u32
@@ -18,7 +18,7 @@
 //! atomically. Any write or sync error *poisons* the writer so that a
 //! possibly-partial frame is never followed by more frames.
 //!
-//! Read side: classification follows PLAN.md §3.3.
+//! Read side (the reading rules in `docs/FORMATS.md`, "Record log"):
 //! - EOF before 8 bytes of the frame header are present: `Incomplete`
 //!   (nothing to verify yet).
 //! - With `len` and `header_crc` present (8..=11 bytes), `header_crc` is

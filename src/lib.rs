@@ -1,13 +1,9 @@
 //! ForgeKV: an educational, persistent key-value storage engine.
 //!
-//! See `PLAN.md` for the phased design. Phase 1: checksummed record log,
-//! WAL, memtable, and a durable `put`/`get`/`delete` engine with recovery.
-//! Phase 2: immutable SSTable writer and reader.
-//! Phase 3: manifest, WAL rotation, memtable flush to L0, multi-layer reads.
-//! Phase 4: L0 -> L1 compaction with tombstone garbage collection.
-//! Phase 5: concurrent reads/writes, background flush/compaction worker,
-//! backpressure, reference-counted table lifetimes, graceful shutdown.
-//! Phase 6: binary protocol, Tokio TCP server and client.
+//! See `README.md` for the architecture, durability semantics and usage, and
+//! `docs/FORMATS.md` for the on-disk and wire formats. Main entry points:
+//! [`Db`] (the storage engine), [`server::serve`] (the TCP server) and
+//! [`client::Client`] (the async client).
 
 #![forbid(unsafe_code)]
 

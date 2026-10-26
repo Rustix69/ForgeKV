@@ -15,7 +15,7 @@ pub enum Error {
         source: io::Error,
     },
     /// On-disk data failed validation (bad checksum, impossible length, ...).
-    /// Never skipped silently; see PLAN.md §3.3.
+    /// Never skipped silently; see `docs/FORMATS.md`, "Record log".
     Corruption {
         file: PathBuf,
         offset: u64,

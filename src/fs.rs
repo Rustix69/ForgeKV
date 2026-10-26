@@ -1,5 +1,5 @@
-//! Filesystem helpers and file naming. See PLAN.md §2: creating or removing a
-//! file is only durable once the parent directory has been fsynced.
+//! Filesystem helpers and file naming. Creating or removing a file is only
+//! durable once the parent directory has been fsynced.
 //!
 //! Directory layout: `LOCK`, `MANIFEST` (`MANIFEST.tmp` transiently),
 //! `wal-NNNNNN.log`, `NNNNNN.sst`. WAL and SST numbers come from one shared

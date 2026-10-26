@@ -1,4 +1,4 @@
-//! Phase 8 (PLAN.md §9, risk 8): on-disk format compatibility.
+//! On-disk format compatibility.
 //!
 //! `tests/data/golden-db/` is a small database (record log format v2 for the
 //! WAL and MANIFEST, SSTable format v1) with data in L1, L0 and the WAL.

@@ -450,10 +450,12 @@ a CRC-32 fingerprint of the source code.
 | [`bench-results/20261026T173115Z/`](bench-results/20261026T173115Z/summary.md) | Phase 8 source, `crc32:bbce3c06` | current results |
 | [`bench-results/20261026T160449Z/`](bench-results/20261026T160449Z/summary.md) | Phase 7 source, `crc32:0f6f6c76` | historical, used for comparison |
 
-The source in this repository (`crc32:3e1430fe`) differs from the Phase 8
-source only by the directory-lock fix (`src/fs.rs`, plus a field type in
+The source in this repository (`crc32:446a43bc`) differs from the Phase 8
+source by the directory-lock fix (`src/fs.rs`, plus a field type in
 `src/engine.rs` and a doc comment in `src/error.rs`), which no benchmark
-times; it has not been re-benchmarked.
+times, by the `license = "MIT"` metadata field in `Cargo.toml`, and by
+documentation comments in `src/`; the last two do not affect runtime
+behaviour. The current source has not been re-benchmarked.
 
 Phase 8 session, one laptop (Intel i5-12500H, ext4 on NVMe, Linux 7.0),
 16-byte keys, 100-byte values, 200,000 keys, medians with min–max across
@@ -553,11 +555,9 @@ docs/BENCHMARKS.md    benchmark method, results and provenance
 bench-results/        recorded benchmark sessions
 scripts/check.sh      formatting, lint and test gate
 scripts/bench.sh      benchmark matrix
-PLAN.md               engineering plan, phase history and decisions
 CLAUDE.md             project rules
 ```
 
 ## License
 
-No license has been selected yet. The repository contains no license file
-and `Cargo.toml` declares no license.
+ForgeKV is licensed under the [MIT License](LICENSE).

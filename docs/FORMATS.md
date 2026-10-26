@@ -37,7 +37,7 @@ frame              = len u32 | header_crc u32 | payload_crc u32 | payload[len]
   1 <= len <= max record size
 ```
 
-Reading (deterministic; PLAN.md §3.3):
+Reading (deterministic):
 
 | Situation | Result |
 |---|---|

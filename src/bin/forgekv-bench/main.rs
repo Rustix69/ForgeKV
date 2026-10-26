@@ -1,4 +1,4 @@
-//! ForgeKV benchmark harness (PLAN.md Phase 7).
+//! ForgeKV benchmark harness.
 //!
 //! ```text
 //! forgekv-bench --mode engine|server|recovery|fsync

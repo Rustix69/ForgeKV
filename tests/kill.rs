@@ -5,7 +5,8 @@
 //!
 //! This is a **process-crash** test. The kernel survives a SIGKILL and keeps
 //! the page cache, so data written but not yet synced is still there. It
-//! says nothing about power loss or an OS crash (PLAN.md §2).
+//! says nothing about power loss or an OS crash (see the README's
+//! "Durability semantics").
 //!
 //! The child is this test binary re-executed with `CHILD_DIR` set, running
 //! only `child_writer`. It prints `ACK <n>` after operation `n` returned

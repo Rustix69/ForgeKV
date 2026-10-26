@@ -9,7 +9,7 @@
 //!   nothing is buffered in user space, the files are then exactly what a
 //!   process crash at that instant would leave.
 //! - **pause** (one shot): the thread that reaches the point blocks until
-//!   [`FailPoints::release`]; [`FailPoints::wait_paused`] lets a test wait
+//!   `FailPoints::release`; `FailPoints::wait_paused` lets a test wait
 //!   until it is there. Used to freeze a flush, compaction or read at a
 //!   precise step and observe the rest of the system.
 //! - **panic** (one shot): the thread that reaches the point panics. Used to

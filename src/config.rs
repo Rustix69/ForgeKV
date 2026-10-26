@@ -17,7 +17,8 @@ pub enum SyncMode {
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum RecoveryMode {
     /// Only an incomplete final frame is discarded; a complete frame with a
-    /// bad checksum is `Error::Corruption` (default). See PLAN.md §3.3.
+    /// bad checksum is `Error::Corruption` (default). See `docs/FORMATS.md`,
+    /// "Record log".
     Strict,
     /// Opt-in: drop everything from the first invalid frame of the newest WAL
     /// and report what was dropped.

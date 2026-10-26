@@ -1,6 +1,6 @@
-//! Client/server wire protocol (PLAN.md Phase 6). Pure encoding and
-//! decoding; no I/O. All integers are **big-endian** (network order),
-//! unlike the little-endian on-disk formats.
+//! Client/server wire protocol. Pure encoding and decoding; no I/O. All
+//! integers are **big-endian** (network order), unlike the little-endian
+//! on-disk formats.
 //!
 //! ```text
 //! frame    = len u32 | payload[len]            1 <= len <= max_frame

@@ -7,16 +7,24 @@
 | `bench-results/20261026T173115Z/` | `source_fingerprint` **`crc32:bbce3c06 over 31 files`** — the Phase 8 source | **current results**: every number on this page outside the comparison section |
 | `bench-results/20261026T160449Z/` | `crc32:0f6f6c76 over 30 files` — the Phase 7 source (before the FIFO writer lock, the reserved-header check and the stall counters) | kept for provenance; describes **old code**, used only in the comparison section |
 
-**The code has changed once since that session** (fingerprint now
-`crc32:3e1430fe over 31 files`), and it has **not** been re-benchmarked.
-The only change is the post-Phase 8 directory-lock fix: `src/fs.rs`
-(`DirLock`, which calls `flock(LOCK_UN)` when a database is dropped),
-`src/engine.rs` (the lock field's type and comment) and `src/error.rs` (a
-doc comment). Lock acquisition is the same `try_lock` call as before, and
-the release runs when a `Db` is dropped, which no benchmark times (it
-happens after the measured phase; recovery times `Db::open` only). So the
-numbers below are expected to carry over, but strictly they describe
-`crc32:bbce3c06`.
+**The code has changed since that session** (fingerprint now
+`crc32:446a43bc over 31 files`), and it has **not** been re-benchmarked.
+It differs from the benchmarked source in three ways:
+
+- The post-Phase 8 directory-lock fix: `src/fs.rs` (`DirLock`, which calls
+  `flock(LOCK_UN)` when a database is dropped), `src/engine.rs` (the lock
+  field's type and comment) and `src/error.rs` (a doc comment). Lock
+  acquisition is the same `try_lock` call as before, and the release runs
+  when a `Db` is dropped, which no benchmark times (it happens after the
+  measured phase; recovery times `Db::open` only).
+- The `license = "MIT"` metadata field in `Cargo.toml`, which is part of
+  the fingerprint but does not affect runtime behaviour.
+- Documentation comments in `src/` (references to a removed planning
+  document replaced or dropped, and two doc links to feature-gated test
+  methods turned into plain text); no code changed.
+
+So the numbers below are expected to carry over, but strictly they
+describe `crc32:bbce3c06`.
 
 **Redaction.** Before the first commit, the `environment.bench_dir` field
 of all 50 JSON files was changed from the local absolute path of the
@@ -272,8 +280,10 @@ median vs median.
 ## Limitations that affect interpretation
 
 - **No power-loss testing.** Durability under `Always` against OS crash or
-  power loss is a design property (sync ordering, PLAN.md §2), not a
-  measured one.
+  power loss is a design property (the order of fsyncs, renames and
+  directory fsyncs; see the README's
+  [durability section](../README.md#durability-semantics)), not a measured
+  one.
 - **Single background worker and two-level compaction** — measured above:
   up to 80% of the time blocked with 1000-byte values. Write amplification
   grows with dataset size; the 200,000-key dataset (~23 MB of user data) is

@@ -1,4 +1,4 @@
-//! L0 -> L1 compaction (PLAN.md Phase 4).
+//! L0 -> L1 compaction.
 //!
 //! # Picking
 //! All L0 files, plus every L1 file whose key range overlaps the combined

@@ -7,7 +7,7 @@
 //! worker. A failpoint returns `Err(Injected)` from inside the operation. Nothing is
 //! buffered in user space, so the files are then exactly what a crash at
 //! that instant would leave (minus page-cache loss, which is out of scope:
-//! see PLAN.md §2).
+//! see the README's "Durability semantics").
 #![cfg(feature = "failpoints")]
 
 use std::collections::BTreeMap;
