@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="880" height="352" viewBox="0 0 880 352" font-family='system-ui, -apple-system, "Segoe UI", Roboto, sans-serif' role="img">
+<title>Server throughput</title>
+<desc>TCP server throughput with 1, 8 and 32 clients, 50% reads.</desc>
+<rect width="880" height="352" fill="#fcfcfb"/>
+<text x="24.0" y="36.0" font-size="19" fill="#0b0b0b" font-weight="650" text-anchor="start">Over TCP: throughput by client count</text>
+<text x="24.0" y="60.0" font-size="13" fill="#52514e" font-weight="400" text-anchor="start">Each client sends one request at a time over loopback to the Tokio server.</text>
+<text x="24.0" y="79.0" font-size="13" fill="#52514e" font-weight="400" text-anchor="start">Throughput peaks at 8 clients; at 32 it falls and median GET latency doubles.</text>
+<line x1="300.0" y1="112.0" x2="300.0" y2="250.0" stroke="#e1e0d9" stroke-width="1" stroke-linecap="round"/>
+<line x1="407.5" y1="112.0" x2="407.5" y2="250.0" stroke="#e1e0d9" stroke-width="1" stroke-linecap="round"/>
+<line x1="515.0" y1="112.0" x2="515.0" y2="250.0" stroke="#e1e0d9" stroke-width="1" stroke-linecap="round"/>
+<line x1="622.5" y1="112.0" x2="622.5" y2="250.0" stroke="#e1e0d9" stroke-width="1" stroke-linecap="round"/>
+<line x1="730.0" y1="112.0" x2="730.0" y2="250.0" stroke="#e1e0d9" stroke-width="1" stroke-linecap="round"/>
+<text x="286.0" y="132.5" font-size="13" fill="#0b0b0b" font-weight="400" text-anchor="end">1 client</text>
+<text x="286.0" y="147.5" font-size="11.5" fill="#898781" font-weight="400" text-anchor="end">GET p50 20.4 µs</text>
+<path d="M300.0,124.0 h97.3 a4,4 0 0 1 4,4 v14 a4,4 0 0 1 -4,4 h-97.3 z" fill="#2a78d6"/>
+<text x="411.3" y="139.5" font-size="13" fill="#0b0b0b" font-weight="600" text-anchor="start">47,129/s</text>
+<text x="286.0" y="178.5" font-size="13" fill="#0b0b0b" font-weight="400" text-anchor="end">8 clients</text>
+<text x="286.0" y="193.5" font-size="11.5" fill="#898781" font-weight="400" text-anchor="end">GET p50 41.1 µs</text>
+<path d="M300.0,170.0 h342.0 a4,4 0 0 1 4,4 v14 a4,4 0 0 1 -4,4 h-342.0 z" fill="#2a78d6"/>
+<text x="656.0" y="185.5" font-size="13" fill="#0b0b0b" font-weight="600" text-anchor="start">160,928/s</text>
+<text x="286.0" y="224.5" font-size="13" fill="#0b0b0b" font-weight="400" text-anchor="end">32 clients</text>
+<text x="286.0" y="239.5" font-size="11.5" fill="#898781" font-weight="400" text-anchor="end">GET p50 83.5 µs</text>
+<path d="M300.0,216.0 h266.4 a4,4 0 0 1 4,4 v14 a4,4 0 0 1 -4,4 h-266.4 z" fill="#2a78d6"/>
+<text x="580.4" y="231.5" font-size="13" fill="#0b0b0b" font-weight="600" text-anchor="start">125,746/s</text>
+<line x1="300.0" y1="112.0" x2="300.0" y2="250.0" stroke="#c3c2b7" stroke-width="1" stroke-linecap="round"/>
+<text x="300.0" y="268.0" font-size="11.5" fill="#898781" font-weight="400" text-anchor="middle">0</text>
+<text x="407.5" y="268.0" font-size="11.5" fill="#898781" font-weight="400" text-anchor="middle">50K</text>
+<text x="515.0" y="268.0" font-size="11.5" fill="#898781" font-weight="400" text-anchor="middle">100K</text>
+<text x="622.5" y="268.0" font-size="11.5" fill="#898781" font-weight="400" text-anchor="middle">150K</text>
+<text x="730.0" y="268.0" font-size="11.5" fill="#898781" font-weight="400" text-anchor="middle">200K</text>
+<text x="515.0" y="288.0" font-size="12" fill="#52514e" font-weight="400" text-anchor="middle">requests per second, median of 5 runs</text>
+<text x="24.0" y="312.0" font-size="11.5" fill="#898781" font-weight="400" text-anchor="start">50% GET / 50% PUT, SyncMode::Never, 200,000 keys. Clients and server share one machine.</text>
+<text x="24.0" y="328.0" font-size="11.5" fill="#898781" font-weight="400" text-anchor="start">Session 20261026T173115Z, code crc32:bbce3c06.</text>
+</svg>

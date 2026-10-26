@@ -443,7 +443,8 @@ Method, environment, every configuration and the caveats are in
 [`docs/BENCHMARKS.md`](docs/BENCHMARKS.md). The harness records every
 operation's latency (exact percentiles), runs each configuration 5 times
 after a warm-up, and stores the raw results with the machine metadata and
-a CRC-32 fingerprint of the source code.
+a CRC-32 fingerprint of the source code. CSV exports of every table and
+run are in [`bench-results/csv/`](bench-results/csv/README.md).
 
 | Session | Code measured | Use |
 |---|---|---|
@@ -473,13 +474,30 @@ Phase 8 session, one laptop (Intel i5-12500H, ext4 on NVMe, Linux 7.0),
   this machine varies between runs (about 0.6 ms or 3–4 ms per sync).
 - With one writer at full speed under `Never`, writes were blocked 34–40%
   of the time waiting for room while the single background worker
-  compacted (80% with 1000-byte values), measured with the engine's stall
+  compacted (78% with 1000-byte values), measured with the engine's stall
   counters.
 - Recovery replayed 300,000 WAL records (39.2 MiB) in about 313 ms. All
   datasets fit in RAM, so reads were served from the OS page cache.
 
 These numbers describe one machine and these workloads only; they are not
 a comparison with other databases.
+
+### Charts
+
+Drawn from the CSV exports by `scripts/bench_charts.py` (every value is
+labelled on the chart; the full data is in
+[`bench-results/csv/`](bench-results/csv/README.md)). Except where marked,
+all come from the Phase 8 session.
+
+![The cost of durability: with one writer, raw fsync with no database reaches 335 writes/s, ForgeKV with SyncMode::Always 306 writes/s, and ForgeKV with SyncMode::Never 383,643 writes/s, about 1,250 times more (medians of 5 runs, log scale)](docs/images/durability-cost.svg)
+
+![Fixing writer starvation: with 4 writers under SyncMode::Always the worst single write fell from 10.01 s (std::sync::Mutex, Phase 7 session) to 28.2 ms (FIFO writer lock, Phase 8 session); with 4 writers under SyncMode::Never throughput fell from 334,418 to 236,323 writes/s](docs/images/writer-fairness.svg)
+
+![Compaction stalls: writes were blocked 78% of the measured time with 4 threads and 1000-byte values, 40% with 1 thread of random writes, 34% with 1 thread of sequential writes, 1% for a 50/50 mix with 4 threads, and 0% for random writes with 4 threads](docs/images/compaction-stalls.svg)
+
+![Read scaling: random reads reach 669,668 per second on 1 thread, 2,255,094 on 4 threads and 2,822,684 on 8 threads, with GET p99 between 2.3 and 4.5 microseconds](docs/images/read-scaling.svg)
+
+![Server throughput with 50% reads: 47,129 requests/s with 1 client, 160,928 with 8 clients and 125,746 with 32 clients; median GET latency 20.4, 41.1 and 83.5 microseconds](docs/images/server-scaling.svg)
 
 ## Testing and crash-recovery coverage
 
@@ -552,9 +570,12 @@ tests/                integration, recovery, crash, concurrency, server and lock
 tests/data/golden-db/ on-disk format fixture
 docs/FORMATS.md       on-disk and wire formats
 docs/BENCHMARKS.md    benchmark method, results and provenance
+docs/images/          benchmark charts (SVG for the README, PNG for sharing)
 bench-results/        recorded benchmark sessions
 scripts/check.sh      formatting, lint and test gate
 scripts/bench.sh      benchmark matrix
+scripts/bench_csv.py  export benchmark sessions to CSV (bench-results/csv/)
+scripts/bench_charts.py  draw the benchmark charts (docs/images/) from the CSVs
 CLAUDE.md             project rules
 ```
 

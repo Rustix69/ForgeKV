@@ -42,7 +42,11 @@ per configuration (every run's raw statistics, the environment, the exact
 command line), `log.txt` (complete output) and `summary.md`. Nothing was
 re-run selectively or dropped: all 25 configurations × 5 runs of each
 session are reported. The tables below are copied from the `summary.md`
-files by script, not retyped.
+files by script, not retyped. The same results are available as CSV in
+[`bench-results/csv/`](../bench-results/csv/README.md), generated from the
+JSON files by `scripts/bench_csv.py`, and as charts in
+[`docs/images/`](images/) (drawn from the CSVs by `scripts/bench_charts.py`;
+shown in the README).
 
 These numbers describe **this machine, this build, these workloads**. They
 are not a comparison with any other database.
@@ -208,7 +212,8 @@ mostly-read mixes are unaffected (90% reads: 998,745 vs 955,921).
 nearly every wait began during a compaction (`fillrandom`: 36 stalls, 35
 during compaction, 3.97 s in total; `fillseq`: 41, all 41, 3.40 s), so no
 write could proceed for 34–40% of the measured time. With 1000-byte values
-it is 16 stalls (15 during compaction) and 7.95 s of the 10 s, with
+it is 16 stalls (15 during compaction) and 7.95 s of stall time, 78% of
+the measured time (each run's measured phase lasted 10.0–10.4 s), with
 single-operation maxima of 687 ms: each compaction rewrites nearly all of
 L1 (random keys overlap every L1 file), and the single background worker
 cannot flush while it compacts. This is the measured cost of two-level
@@ -248,7 +253,7 @@ median vs median.
 | engine-fillrandom-never-c1 | 394289 (381967–430678) | 383643 (381304–407399) | -3% | 179.45 ms | 152.03 ms |
 | engine-fillrandom-never-c4 | 334418 (319056–342945) | 236323 (185663–242003) | -29% | 109.46 ms | 50.90 ms |
 | engine-fillrandom-always-c1 | 282 (273–317) | 306 (287–744) | +9% | 19.10 ms | 8.93 ms |
-| engine-fillrandom-always-c4 | 283 (273–324) | 287 (249–306) | +1% | 10.01 s | 28.22 ms |
+| engine-fillrandom-always-c4 | 283 (273–324) | 287 (249–306) | +2% | 10.01 s | 28.22 ms |
 | engine-fillrandom-never-c4-v1000 | 23953 (22804–25071) | 23673 (22829–23821) | -1% | 719.18 ms | 687.05 ms |
 | engine-readrandom-always-c1 | 648724 (571604–675593) | 669668 (640137–695049) | +3% | 276.5 µs | 1.03 ms |
 | engine-readrandom-always-c4 | 2236751 (2145333–2292108) | 2255094 (1948064–2325036) | +1% | 1.77 ms | 1.04 ms |
@@ -285,7 +290,7 @@ median vs median.
   [durability section](../README.md#durability-semantics)), not a measured
   one.
 - **Single background worker and two-level compaction** — measured above:
-  up to 80% of the time blocked with 1000-byte values. Write amplification
+  78% of the time blocked with 1000-byte values. Write amplification
   grows with dataset size; the 200,000-key dataset (~23 MB of user data) is
   small.
 - **No group commit** (`Always` throughput is one sync per write) and **a

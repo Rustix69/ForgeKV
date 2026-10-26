@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="880" height="444" viewBox="0 0 880 444" font-family='system-ui, -apple-system, "Segoe UI", Roboto, sans-serif' role="img">
+<title>Compaction stalls</title>
+<desc>Share of the measured time during which writes were blocked waiting for memtable room.</desc>
+<rect width="880" height="444" fill="#fcfcfb"/>
+<text x="24.0" y="36.0" font-size="19" fill="#0b0b0b" font-weight="650" text-anchor="start">Compaction stalls: how long writes were blocked</text>
+<text x="24.0" y="60.0" font-size="13" fill="#52514e" font-weight="400" text-anchor="start">Writers wait when both memtables are full and the single background worker is still busy.</text>
+<text x="24.0" y="79.0" font-size="13" fill="#52514e" font-weight="400" text-anchor="start">Measured with the engine&#x27;s stall counters. In write-heavy runs, nearly every stall began during a compaction.</text>
+<line x1="300.0" y1="112.0" x2="300.0" y2="342.0" stroke="#e1e0d9" stroke-width="1" stroke-linecap="round"/>
+<line x1="372.5" y1="112.0" x2="372.5" y2="342.0" stroke="#e1e0d9" stroke-width="1" stroke-linecap="round"/>
+<line x1="445.0" y1="112.0" x2="445.0" y2="342.0" stroke="#e1e0d9" stroke-width="1" stroke-linecap="round"/>
+<line x1="517.5" y1="112.0" x2="517.5" y2="342.0" stroke="#e1e0d9" stroke-width="1" stroke-linecap="round"/>
+<line x1="590.0" y1="112.0" x2="590.0" y2="342.0" stroke="#e1e0d9" stroke-width="1" stroke-linecap="round"/>
+<text x="286.0" y="132.5" font-size="13" fill="#0b0b0b" font-weight="400" text-anchor="end">Random writes, 4 threads</text>
+<text x="286.0" y="147.5" font-size="11.5" fill="#898781" font-weight="400" text-anchor="end">1000 B values</text>
+<path d="M300.0,124.0 h222.3 a4,4 0 0 1 4,4 v14 a4,4 0 0 1 -4,4 h-222.3 z" fill="#2a78d6"/>
+<text x="536.3" y="139.5" font-size="13" fill="#0b0b0b" font-weight="600" text-anchor="start">78%  (15 of 16 stalls during compaction)</text>
+<text x="286.0" y="178.5" font-size="13" fill="#0b0b0b" font-weight="400" text-anchor="end">Random writes, 1 thread</text>
+<text x="286.0" y="193.5" font-size="11.5" fill="#898781" font-weight="400" text-anchor="end">100 B values</text>
+<path d="M300.0,170.0 h111.1 a4,4 0 0 1 4,4 v14 a4,4 0 0 1 -4,4 h-111.1 z" fill="#2a78d6"/>
+<text x="425.1" y="185.5" font-size="13" fill="#0b0b0b" font-weight="600" text-anchor="start">40%  (35 of 36 stalls during compaction)</text>
+<text x="286.0" y="224.5" font-size="13" fill="#0b0b0b" font-weight="400" text-anchor="end">Sequential writes, 1 thread</text>
+<text x="286.0" y="239.5" font-size="11.5" fill="#898781" font-weight="400" text-anchor="end">100 B values</text>
+<path d="M300.0,216.0 h94.4 a4,4 0 0 1 4,4 v14 a4,4 0 0 1 -4,4 h-94.4 z" fill="#2a78d6"/>
+<text x="408.4" y="231.5" font-size="13" fill="#0b0b0b" font-weight="600" text-anchor="start">34%  (41 of 41 stalls during compaction)</text>
+<text x="286.0" y="270.5" font-size="13" fill="#0b0b0b" font-weight="400" text-anchor="end">50% reads / 50% writes</text>
+<text x="286.0" y="285.5" font-size="11.5" fill="#898781" font-weight="400" text-anchor="end">4 threads, 100 B values</text>
+<path d="M300.0,262.0 h0.0 a4,4 0 0 1 4,4 v14 a4,4 0 0 1 -4,4 h-0.0 z" fill="#2a78d6"/>
+<text x="313.4" y="277.5" font-size="13" fill="#0b0b0b" font-weight="600" text-anchor="start">1%  (1 of 6 stalls during compaction)</text>
+<text x="286.0" y="316.5" font-size="13" fill="#0b0b0b" font-weight="400" text-anchor="end">Random writes, 4 threads</text>
+<text x="286.0" y="331.5" font-size="11.5" fill="#898781" font-weight="400" text-anchor="end">100 B values</text>
+<text x="310.0" y="323.5" font-size="13" fill="#0b0b0b" font-weight="600" text-anchor="start">0%</text>
+<line x1="300.0" y1="112.0" x2="300.0" y2="342.0" stroke="#c3c2b7" stroke-width="1" stroke-linecap="round"/>
+<text x="300.0" y="360.0" font-size="11.5" fill="#898781" font-weight="400" text-anchor="middle">0%</text>
+<text x="372.5" y="360.0" font-size="11.5" fill="#898781" font-weight="400" text-anchor="middle">25%</text>
+<text x="445.0" y="360.0" font-size="11.5" fill="#898781" font-weight="400" text-anchor="middle">50%</text>
+<text x="517.5" y="360.0" font-size="11.5" fill="#898781" font-weight="400" text-anchor="middle">75%</text>
+<text x="590.0" y="360.0" font-size="11.5" fill="#898781" font-weight="400" text-anchor="middle">100%</text>
+<text x="445.0" y="380.0" font-size="12" fill="#52514e" font-weight="400" text-anchor="middle">share of the measured phase with writes blocked (median of 5 runs)</text>
+<text x="24.0" y="404.0" font-size="11.5" fill="#898781" font-weight="400" text-anchor="start">SyncMode::Never, 200,000 keys. Two-level compaction with one background worker.</text>
+<text x="24.0" y="420.0" font-size="11.5" fill="#898781" font-weight="400" text-anchor="start">Session 20261026T173115Z, code crc32:bbce3c06.</text>
+</svg>

@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="880" height="530" viewBox="0 0 880 530" font-family='system-ui, -apple-system, "Segoe UI", Roboto, sans-serif' role="img">
+<title>Fixing writer starvation</title>
+<desc>Worst single write latency and throughput with 4 writer threads, before and after the FIFO writer lock.</desc>
+<rect width="880" height="530" fill="#fcfcfb"/>
+<text x="24.0" y="36.0" font-size="19" fill="#0b0b0b" font-weight="650" text-anchor="start">Fixing writer starvation with a FIFO writer lock</text>
+<text x="24.0" y="60.0" font-size="13" fill="#52514e" font-weight="400" text-anchor="start">With std::sync::Mutex one writer could wait 10 seconds while others re-took the lock.</text>
+<text x="24.0" y="79.0" font-size="13" fill="#52514e" font-weight="400" text-anchor="start">A first-come-first-served lock bounds the wait; the cost is lower throughput without fsync.</text>
+<text x="24.0" y="112.0" font-size="14" fill="#0b0b0b" font-weight="600" text-anchor="start">Worst single write, 4 writers, SyncMode::Always</text>
+<rect x="300" y="122" width="12" height="12" rx="3" fill="#898781"/>
+<text x="318.0" y="132.0" font-size="12.5" fill="#52514e" font-weight="400" text-anchor="start">Before: std::sync::Mutex</text>
+<rect x="502.8" y="122" width="12" height="12" rx="3" fill="#2a78d6"/>
+<text x="520.8" y="132.0" font-size="12.5" fill="#52514e" font-weight="400" text-anchor="start">After: FIFO writer lock</text>
+<line x1="300.0" y1="156.0" x2="300.0" y2="248.0" stroke="#e1e0d9" stroke-width="1" stroke-linecap="round"/>
+<line x1="386.0" y1="156.0" x2="386.0" y2="248.0" stroke="#e1e0d9" stroke-width="1" stroke-linecap="round"/>
+<line x1="472.0" y1="156.0" x2="472.0" y2="248.0" stroke="#e1e0d9" stroke-width="1" stroke-linecap="round"/>
+<line x1="558.0" y1="156.0" x2="558.0" y2="248.0" stroke="#e1e0d9" stroke-width="1" stroke-linecap="round"/>
+<line x1="644.0" y1="156.0" x2="644.0" y2="248.0" stroke="#e1e0d9" stroke-width="1" stroke-linecap="round"/>
+<line x1="730.0" y1="156.0" x2="730.0" y2="248.0" stroke="#e1e0d9" stroke-width="1" stroke-linecap="round"/>
+<text x="286.0" y="176.5" font-size="13" fill="#0b0b0b" font-weight="400" text-anchor="end">Before</text>
+<text x="286.0" y="191.5" font-size="11.5" fill="#898781" font-weight="400" text-anchor="end">std::sync::Mutex</text>
+<circle cx="644.0" cy="179.0" r="6" fill="#898781" stroke="#fcfcfb" stroke-width="2"/>
+<text x="660.0" y="183.5" font-size="13" fill="#0b0b0b" font-weight="600" text-anchor="start">10.01 s</text>
+<text x="286.0" y="222.5" font-size="13" fill="#0b0b0b" font-weight="400" text-anchor="end">After</text>
+<text x="286.0" y="237.5" font-size="11.5" fill="#898781" font-weight="400" text-anchor="end">FIFO writer lock</text>
+<circle cx="424.7" cy="225.0" r="6" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
+<text x="440.7" y="229.5" font-size="13" fill="#0b0b0b" font-weight="600" text-anchor="start">28.2 ms</text>
+<line x1="300.0" y1="156.0" x2="300.0" y2="248.0" stroke="#c3c2b7" stroke-width="1" stroke-linecap="round"/>
+<text x="300.0" y="266.0" font-size="11.5" fill="#898781" font-weight="400" text-anchor="middle">1 ms</text>
+<text x="386.0" y="266.0" font-size="11.5" fill="#898781" font-weight="400" text-anchor="middle">10 ms</text>
+<text x="472.0" y="266.0" font-size="11.5" fill="#898781" font-weight="400" text-anchor="middle">100 ms</text>
+<text x="558.0" y="266.0" font-size="11.5" fill="#898781" font-weight="400" text-anchor="middle">1 s</text>
+<text x="644.0" y="266.0" font-size="11.5" fill="#898781" font-weight="400" text-anchor="middle">10 s</text>
+<text x="730.0" y="266.0" font-size="11.5" fill="#898781" font-weight="400" text-anchor="middle">100 s</text>
+<text x="515.0" y="286.0" font-size="12" fill="#52514e" font-weight="400" text-anchor="middle">worst single write latency across 5 runs (log scale)</text>
+<text x="24.0" y="310.0" font-size="14" fill="#0b0b0b" font-weight="600" text-anchor="start">Throughput, 4 writers, SyncMode::Never (no fsync)</text>
+<line x1="300.0" y1="336.0" x2="300.0" y2="428.0" stroke="#e1e0d9" stroke-width="1" stroke-linecap="round"/>
+<line x1="407.5" y1="336.0" x2="407.5" y2="428.0" stroke="#e1e0d9" stroke-width="1" stroke-linecap="round"/>
+<line x1="515.0" y1="336.0" x2="515.0" y2="428.0" stroke="#e1e0d9" stroke-width="1" stroke-linecap="round"/>
+<line x1="622.5" y1="336.0" x2="622.5" y2="428.0" stroke="#e1e0d9" stroke-width="1" stroke-linecap="round"/>
+<line x1="730.0" y1="336.0" x2="730.0" y2="428.0" stroke="#e1e0d9" stroke-width="1" stroke-linecap="round"/>
+<text x="286.0" y="356.5" font-size="13" fill="#0b0b0b" font-weight="400" text-anchor="end">Before</text>
+<text x="286.0" y="371.5" font-size="11.5" fill="#898781" font-weight="400" text-anchor="end">std::sync::Mutex</text>
+<path d="M300.0,348.0 h355.5 a4,4 0 0 1 4,4 v14 a4,4 0 0 1 -4,4 h-355.5 z" fill="#898781"/>
+<text x="669.5" y="363.5" font-size="13" fill="#0b0b0b" font-weight="600" text-anchor="start">334,418/s</text>
+<text x="286.0" y="402.5" font-size="13" fill="#0b0b0b" font-weight="400" text-anchor="end">After</text>
+<text x="286.0" y="417.5" font-size="11.5" fill="#898781" font-weight="400" text-anchor="end">FIFO writer lock</text>
+<path d="M300.0,394.0 h250.0 a4,4 0 0 1 4,4 v14 a4,4 0 0 1 -4,4 h-250.0 z" fill="#2a78d6"/>
+<text x="564.0" y="409.5" font-size="13" fill="#0b0b0b" font-weight="600" text-anchor="start">236,323/s</text>
+<line x1="300.0" y1="336.0" x2="300.0" y2="428.0" stroke="#c3c2b7" stroke-width="1" stroke-linecap="round"/>
+<text x="300.0" y="446.0" font-size="11.5" fill="#898781" font-weight="400" text-anchor="middle">0</text>
+<text x="407.5" y="446.0" font-size="11.5" fill="#898781" font-weight="400" text-anchor="middle">100K</text>
+<text x="515.0" y="446.0" font-size="11.5" fill="#898781" font-weight="400" text-anchor="middle">200K</text>
+<text x="622.5" y="446.0" font-size="11.5" fill="#898781" font-weight="400" text-anchor="middle">300K</text>
+<text x="730.0" y="446.0" font-size="11.5" fill="#898781" font-weight="400" text-anchor="middle">400K</text>
+<text x="515.0" y="466.0" font-size="12" fill="#52514e" font-weight="400" text-anchor="middle">writes per second, median of 5 runs</text>
+<text x="24.0" y="490.0" font-size="11.5" fill="#898781" font-weight="400" text-anchor="start">Before = session 20261026T160449Z (code crc32:0f6f6c76); after = session 20261026T173115Z</text>
+<text x="24.0" y="506.0" font-size="11.5" fill="#898781" font-weight="400" text-anchor="start">(code crc32:bbce3c06). Same laptop and workloads, different sessions. Random keys, 100 B values.</text>
+</svg>
