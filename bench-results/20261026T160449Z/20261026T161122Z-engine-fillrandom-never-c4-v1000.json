@@ -1,0 +1,343 @@
+{
+  "schema": "forgekv-bench/1",
+  "started_at": "2026-10-26T16:11:22Z",
+  "finished_at": "2026-10-26T16:12:30Z",
+  "environment": {
+    "cpu_model": "12th Gen Intel(R) Core(TM) i5-12500H",
+    "logical_cpus": 16,
+    "mem_total": "15499704 kB",
+    "os": "Ubuntu 26.04 LTS",
+    "kernel": "7.0.0-38-generic",
+    "cpu_governor": "powersave",
+    "load_average_at_start": "3.19 3.06 2.08 2/1781 251744",
+    "bench_dir": "<repository>/bench-results/tmp",
+    "filesystem": "ext4",
+    "mount_point": "/",
+    "mount_source": "/dev/nvme0n1p5",
+    "storage_device": "nvme0n1: SK hynix PC801 HFS512GEJ9X101N",
+    "rotational": "no (SSD/NVMe)",
+    "rustc": "rustc 1.98.1 (48a229cea 2026-09-01)",
+    "build_profile": "release",
+    "git_head": "none (no commits)",
+    "git_dirty": true,
+    "source_fingerprint": "crc32:0f6f6c76 over 30 files",
+    "command_line": "target/release/forgekv-bench --runs 5 --warmup-secs 3 --duration-secs 10 --seed 42 --key-size 16 --value-size 100 --dir bench-results/tmp --out bench-results/20261026T160449Z --mode engine --keys 200000 --workload fillrandom --sync never --threads 4 --value-size 1000 --name engine-fillrandom-never-c4-v1000"
+  },
+  "params": {
+    "name": "engine-fillrandom-never-c4-v1000",
+    "mode": "engine",
+    "workload": "fillrandom",
+    "read_pct": 50,
+    "keys": 200000,
+    "key_size": 16,
+    "value_size": 1000,
+    "threads_or_clients": 4,
+    "warmup_secs": 3,
+    "duration_secs": 10,
+    "runs": 5,
+    "sync": "never",
+    "seed": 42,
+    "max_ops": 50000000,
+    "dir": "bench-results/tmp",
+    "engine_options": "Options { sync_mode: Never, recovery_mode: Strict, max_key_len: 4096, max_value_len: 1048576, memtable_bytes: 4194304, l0_compaction_trigger: 4, sst_target_bytes: 2097152, block_bytes: 4096, manifest_max_bytes: 1048576 }"
+  },
+  "warnings": [],
+  "runs": [
+    {
+      "run": 0,
+      "preload_secs": 0,
+      "open_secs": 0.016014921,
+      "elapsed_secs": 10.313183315,
+      "ops_ok": 246904,
+      "ops_per_sec": 23940.61973482918,
+      "ops": {
+        "get": 0,
+        "put": 246904,
+        "delete": 0
+      },
+      "get_misses": 0,
+      "errors": 0,
+      "busy": 0,
+      "first_error": null,
+      "latency_ns": {
+        "all": {
+          "count": 246904,
+          "mean": 166942.18332631307,
+          "min": 732,
+          "p50": 3817,
+          "p95": 47869,
+          "p99": 92833,
+          "p999": 8685343,
+          "max": 640070616
+        },
+        "get": null,
+        "put": {
+          "count": 246904,
+          "mean": 166942.18332631307,
+          "min": 732,
+          "p50": 3817,
+          "p95": 47869,
+          "p99": 92833,
+          "p999": 8685343,
+          "max": 640070616
+        },
+        "delete": null
+      },
+      "end_state": {
+        "l0_files": 1,
+        "l1_files": 84,
+        "flushes": 97,
+        "compactions": 24,
+        "dir_bytes": 188211565
+      }
+    },
+    {
+      "run": 1,
+      "preload_secs": 0,
+      "open_secs": 0.018442615,
+      "elapsed_secs": 10.474030471,
+      "ops_ok": 238847,
+      "ops_per_sec": 22803.733544723615,
+      "ops": {
+        "get": 0,
+        "put": 238847,
+        "delete": 0
+      },
+      "get_misses": 0,
+      "errors": 0,
+      "busy": 0,
+      "first_error": null,
+      "latency_ns": {
+        "all": {
+          "count": 238847,
+          "mean": 175264.96758175737,
+          "min": 713,
+          "p50": 4311,
+          "p95": 58386,
+          "p99": 115860,
+          "p999": 10501515,
+          "max": 668599718
+        },
+        "get": null,
+        "put": {
+          "count": 238847,
+          "mean": 175264.96758175737,
+          "min": 713,
+          "p50": 4311,
+          "p95": 58386,
+          "p99": 115860,
+          "p999": 10501515,
+          "max": 668599718
+        },
+        "delete": null
+      },
+      "end_state": {
+        "l0_files": 1,
+        "l1_files": 84,
+        "flushes": 97,
+        "compactions": 24,
+        "dir_bytes": 185920537
+      }
+    },
+    {
+      "run": 2,
+      "preload_secs": 0,
+      "open_secs": 0.018607713,
+      "elapsed_secs": 10.000473599,
+      "ops_ok": 248393,
+      "ops_per_sec": 24838.123668946853,
+      "ops": {
+        "get": 0,
+        "put": 248393,
+        "delete": 0
+      },
+      "get_misses": 0,
+      "errors": 0,
+      "busy": 0,
+      "first_error": null,
+      "latency_ns": {
+        "all": {
+          "count": 248393,
+          "mean": 160911.08744610354,
+          "min": 720,
+          "p50": 4123,
+          "p95": 50188,
+          "p99": 108449,
+          "p999": 3305706,
+          "max": 654163356
+        },
+        "get": null,
+        "put": {
+          "count": 248393,
+          "mean": 160911.08744610354,
+          "min": 720,
+          "p50": 4123,
+          "p95": 50188,
+          "p99": 108449,
+          "p999": 3305706,
+          "max": 654163356
+        },
+        "delete": null
+      },
+      "end_state": {
+        "l0_files": 3,
+        "l1_files": 84,
+        "flushes": 99,
+        "compactions": 24,
+        "dir_bytes": 198244820
+      }
+    },
+    {
+      "run": 3,
+      "preload_secs": 0,
+      "open_secs": 0.017434474,
+      "elapsed_secs": 10.003063273,
+      "ops_ok": 239606,
+      "ops_per_sec": 23953.26246178389,
+      "ops": {
+        "get": 0,
+        "put": 239606,
+        "delete": 0
+      },
+      "get_misses": 0,
+      "errors": 0,
+      "busy": 0,
+      "first_error": null,
+      "latency_ns": {
+        "all": {
+          "count": 239606,
+          "mean": 166862.70817091392,
+          "min": 705,
+          "p50": 4111,
+          "p95": 53284,
+          "p99": 107121,
+          "p999": 10557362,
+          "max": 719178485
+        },
+        "get": null,
+        "put": {
+          "count": 239606,
+          "mean": 166862.70817091392,
+          "min": 705,
+          "p50": 4111,
+          "p95": 53284,
+          "p99": 107121,
+          "p999": 10557362,
+          "max": 719178485
+        },
+        "delete": null
+      },
+      "end_state": {
+        "l0_files": 4,
+        "l1_files": 82,
+        "flushes": 96,
+        "compactions": 23,
+        "dir_bytes": 199282555
+      }
+    },
+    {
+      "run": 4,
+      "preload_secs": 0,
+      "open_secs": 0.017952169,
+      "elapsed_secs": 10.00012914,
+      "ops_ok": 250710,
+      "ops_per_sec": 25070.676237287073,
+      "ops": {
+        "get": 0,
+        "put": 250710,
+        "delete": 0
+      },
+      "get_misses": 0,
+      "errors": 0,
+      "busy": 0,
+      "first_error": null,
+      "latency_ns": {
+        "all": {
+          "count": 250710,
+          "mean": 159413.2100035898,
+          "min": 733,
+          "p50": 4362,
+          "p95": 55286,
+          "p99": 100839,
+          "p999": 1167914,
+          "max": 649030254
+        },
+        "get": null,
+        "put": {
+          "count": 250710,
+          "mean": 159413.2100035898,
+          "min": 733,
+          "p50": 4362,
+          "p95": 55286,
+          "p99": 100839,
+          "p999": 1167914,
+          "max": 649030254
+        },
+        "delete": null
+      },
+      "end_state": {
+        "l0_files": 3,
+        "l1_files": 84,
+        "flushes": 99,
+        "compactions": 24,
+        "dir_bytes": 200663036
+      }
+    }
+  ],
+  "summary": {
+    "note": "median/min/max across runs of each per-run statistic",
+    "ops_per_sec": {
+      "median": 23953.26246178389,
+      "min": 22803.733544723615,
+      "max": 25070.676237287073
+    },
+    "latency_ns": {
+      "all": {
+        "p50": {
+          "median": 4123,
+          "min": 3817,
+          "max": 4362
+        },
+        "p95": {
+          "median": 53284,
+          "min": 47869,
+          "max": 58386
+        },
+        "p99": {
+          "median": 107121,
+          "min": 92833,
+          "max": 115860
+        },
+        "max": {
+          "median": 654163356,
+          "min": 640070616,
+          "max": 719178485
+        }
+      },
+      "put": {
+        "p50": {
+          "median": 4123,
+          "min": 3817,
+          "max": 4362
+        },
+        "p95": {
+          "median": 53284,
+          "min": 47869,
+          "max": 58386
+        },
+        "p99": {
+          "median": 107121,
+          "min": 92833,
+          "max": 115860
+        },
+        "max": {
+          "median": 654163356,
+          "min": 640070616,
+          "max": 719178485
+        }
+      }
+    },
+    "errors_total": 0,
+    "busy_total": 0
+  }
+}

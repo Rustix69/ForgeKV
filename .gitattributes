@@ -1,0 +1,3 @@
+# Binary test fixtures: byte-exact on-disk files (tests/golden.rs). Never
+# convert line endings or diff them as text.
+tests/data/** binary

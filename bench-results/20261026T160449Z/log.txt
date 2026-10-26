@@ -1,0 +1,225 @@
++ target/release/forgekv-bench --runs 5 --warmup-secs 3 --duration-secs 10 --seed 42 --key-size 16 --value-size 100 --dir bench-results/tmp --out bench-results/20261026T160449Z --mode fsync --threads 1 --name fsync-probe-start
+wrote bench-results/20261026T160449Z/20261026T160449Z-fsync-probe-start.json
+== fsync-probe-start (5 runs)
+run 0: 829 ops/s (8287 ok in 10.00 s)  put p50 594.4 µs p95 3.47 ms p99 3.91 ms max 11.83 ms
+run 1: 348 ops/s (3484 ok in 10.00 s)  put p50 3.03 ms p95 3.86 ms p99 4.21 ms max 18.47 ms
+run 2: 348 ops/s (3482 ok in 10.00 s)  put p50 3.05 ms p95 3.91 ms p99 4.23 ms max 9.36 ms
+run 3: 664 ops/s (6644 ok in 10.00 s)  put p50 714.0 µs p95 3.50 ms p99 3.81 ms max 7.24 ms
+run 4: 354 ops/s (3544 ok in 10.00 s)  put p50 3.03 ms p95 3.83 ms p99 4.14 ms max 8.98 ms
+| fsync-probe-start | fsync | append 100 B + fdatasync | always | 1 | 5 | 354 (348–829) | - | 3.03 ms / 3.83 ms / 4.14 ms | - | 18.47 ms | 0 / 0 |
++ target/release/forgekv-bench --runs 5 --warmup-secs 3 --duration-secs 10 --seed 42 --key-size 16 --value-size 100 --dir bench-results/tmp --out bench-results/20261026T160449Z --mode engine --keys 200000 --workload fillseq --sync never --threads 1
+wrote bench-results/20261026T160449Z/20261026T160554Z-engine-fillseq-never-c1.json
+== engine-fillseq-never-c1 (5 runs)
+run 0: 420038 ops/s (4219875 ok in 10.05 s)  put p50 845 ns p95 2.1 µs p99 3.3 µs max 140.98 ms
+run 1: 403649 ops/s (4036528 ok in 10.00 s)  put p50 852 ns p95 2.1 µs p99 3.3 µs max 150.18 ms
+run 2: 420515 ops/s (4227049 ok in 10.05 s)  put p50 850 ns p95 2.1 µs p99 3.3 µs max 129.08 ms
+run 3: 447723 ops/s (4501200 ok in 10.05 s)  put p50 845 ns p95 2.0 µs p99 3.1 µs max 122.83 ms
+run 4: 449909 ops/s (4501200 ok in 10.00 s)  put p50 834 ns p95 2.0 µs p99 3.1 µs max 126.81 ms
+| engine-fillseq-never-c1 | engine | fillseq | never | 1 | 5 | 420515 (403649–449909) | - | 845 ns / 2.1 µs / 3.3 µs | - | 150.18 ms | 0 / 0 |
++ target/release/forgekv-bench --runs 5 --warmup-secs 3 --duration-secs 10 --seed 42 --key-size 16 --value-size 100 --dir bench-results/tmp --out bench-results/20261026T160449Z --mode engine --keys 200000 --workload fillrandom --sync never --threads 1
+wrote bench-results/20261026T160449Z/20261026T160700Z-engine-fillrandom-never-c1.json
+== engine-fillrandom-never-c1 (5 runs)
+run 0: 430678 ops/s (4306852 ok in 10.00 s)  put p50 887 ns p95 1.7 µs p99 2.6 µs max 128.70 ms
+run 1: 381967 ops/s (3821984 ok in 10.01 s)  put p50 918 ns p95 1.8 µs p99 2.9 µs max 141.88 ms
+run 2: 397302 ops/s (3973045 ok in 10.00 s)  put p50 889 ns p95 1.7 µs p99 2.7 µs max 144.62 ms
+run 3: 394289 ops/s (3976773 ok in 10.09 s)  put p50 896 ns p95 1.8 µs p99 2.9 µs max 179.45 ms
+run 4: 389906 ops/s (3935498 ok in 10.09 s)  put p50 892 ns p95 1.7 µs p99 2.7 µs max 147.27 ms
+| engine-fillrandom-never-c1 | engine | fillrandom | never | 1 | 5 | 394289 (381967–430678) | - | 892 ns / 1.7 µs / 2.7 µs | - | 179.45 ms | 0 / 0 |
++ target/release/forgekv-bench --runs 5 --warmup-secs 3 --duration-secs 10 --seed 42 --key-size 16 --value-size 100 --dir bench-results/tmp --out bench-results/20261026T160449Z --mode engine --keys 200000 --workload fillrandom --sync never --threads 4
+wrote bench-results/20261026T160449Z/20261026T160806Z-engine-fillrandom-never-c4.json
+== engine-fillrandom-never-c4 (5 runs)
+run 0: 334418 ops/s (3344233 ok in 10.00 s)  put p50 2.0 µs p95 23.5 µs p99 38.5 µs max 106.34 ms
+run 1: 319056 ops/s (3190582 ok in 10.00 s)  put p50 2.0 µs p95 24.4 µs p99 42.2 µs max 109.46 ms
+run 2: 327905 ops/s (3279108 ok in 10.00 s)  put p50 2.1 µs p95 24.6 µs p99 41.2 µs max 84.73 ms
+run 3: 342409 ops/s (3424117 ok in 10.00 s)  put p50 1.9 µs p95 23.2 µs p99 37.6 µs max 96.71 ms
+run 4: 342945 ops/s (3429493 ok in 10.00 s)  put p50 2.0 µs p95 22.9 µs p99 38.0 µs max 95.25 ms
+| engine-fillrandom-never-c4 | engine | fillrandom | never | 4 | 5 | 334418 (319056–342945) | - | 2.0 µs / 23.5 µs / 38.5 µs | - | 109.46 ms | 0 / 0 |
++ target/release/forgekv-bench --runs 5 --warmup-secs 3 --duration-secs 10 --seed 42 --key-size 16 --value-size 100 --dir bench-results/tmp --out bench-results/20261026T160449Z --mode engine --keys 200000 --workload fillrandom --sync always --threads 1
+wrote bench-results/20261026T160449Z/20261026T160911Z-engine-fillrandom-always-c1.json
+== engine-fillrandom-always-c1 (5 runs)
+run 0: 282 ops/s (2818 ok in 10.00 s)  put p50 3.52 ms p95 3.98 ms p99 4.55 ms max 7.27 ms
+run 1: 273 ops/s (2734 ok in 10.00 s)  put p50 3.59 ms p95 4.22 ms p99 5.10 ms max 18.80 ms
+run 2: 317 ops/s (3171 ok in 10.00 s)  put p50 3.32 ms p95 3.95 ms p99 4.36 ms max 19.10 ms
+run 3: 288 ops/s (2878 ok in 10.00 s)  put p50 3.59 ms p95 4.18 ms p99 4.56 ms max 8.49 ms
+run 4: 274 ops/s (2740 ok in 10.00 s)  put p50 3.59 ms p95 4.18 ms p99 4.73 ms max 17.72 ms
+| engine-fillrandom-always-c1 | engine | fillrandom | always | 1 | 5 | 282 (273–317) | - | 3.59 ms / 4.18 ms / 4.56 ms | - | 19.10 ms | 0 / 0 |
++ target/release/forgekv-bench --runs 5 --warmup-secs 3 --duration-secs 10 --seed 42 --key-size 16 --value-size 100 --dir bench-results/tmp --out bench-results/20261026T160449Z --mode engine --keys 200000 --workload fillrandom --sync always --threads 4
+wrote bench-results/20261026T160449Z/20261026T161017Z-engine-fillrandom-always-c4.json
+== engine-fillrandom-always-c4 (5 runs)
+run 0: 279 ops/s (2797 ok in 10.01 s)  put p50 3.47 ms p95 4.20 ms p99 6.59 ms max 7.39 s
+run 1: 324 ops/s (3242 ok in 10.01 s)  put p50 3.32 ms p95 3.96 ms p99 4.26 ms max 5.46 s
+run 2: 284 ops/s (2841 ok in 10.01 s)  put p50 3.62 ms p95 4.18 ms p99 4.91 ms max 8.38 s
+run 3: 273 ops/s (2731 ok in 10.01 s)  put p50 3.61 ms p95 4.14 ms p99 6.15 ms max 10.01 s
+run 4: 283 ops/s (2830 ok in 10.01 s)  put p50 3.46 ms p95 4.03 ms p99 6.32 ms max 5.95 s
+| engine-fillrandom-always-c4 | engine | fillrandom | always | 4 | 5 | 283 (273–324) | - | 3.47 ms / 4.14 ms / 6.15 ms | - | 10.01 s | 0 / 0 |
++ target/release/forgekv-bench --runs 5 --warmup-secs 3 --duration-secs 10 --seed 42 --key-size 16 --value-size 100 --dir bench-results/tmp --out bench-results/20261026T160449Z --mode engine --keys 200000 --workload fillrandom --sync never --threads 4 --value-size 1000 --name engine-fillrandom-never-c4-v1000
+wrote bench-results/20261026T160449Z/20261026T161122Z-engine-fillrandom-never-c4-v1000.json
+== engine-fillrandom-never-c4-v1000 (5 runs)
+run 0: 23941 ops/s (246904 ok in 10.31 s)  put p50 3.8 µs p95 47.9 µs p99 92.8 µs max 640.07 ms
+run 1: 22804 ops/s (238847 ok in 10.47 s)  put p50 4.3 µs p95 58.4 µs p99 115.9 µs max 668.60 ms
+run 2: 24838 ops/s (248393 ok in 10.00 s)  put p50 4.1 µs p95 50.2 µs p99 108.4 µs max 654.16 ms
+run 3: 23953 ops/s (239606 ok in 10.00 s)  put p50 4.1 µs p95 53.3 µs p99 107.1 µs max 719.18 ms
+run 4: 25071 ops/s (250710 ok in 10.00 s)  put p50 4.4 µs p95 55.3 µs p99 100.8 µs max 649.03 ms
+| engine-fillrandom-never-c4-v1000 | engine | fillrandom | never | 4 | 5 | 23953 (22804–25071) | - | 4.1 µs / 53.3 µs / 107.1 µs | - | 719.18 ms | 0 / 0 |
++ target/release/forgekv-bench --runs 5 --warmup-secs 3 --duration-secs 10 --seed 42 --key-size 16 --value-size 100 --dir bench-results/tmp --out bench-results/20261026T160449Z --mode engine --keys 200000 --workload readrandom --sync always --threads 1
+wrote bench-results/20261026T160449Z/20261026T161230Z-engine-readrandom-always-c1.json
+== engine-readrandom-always-c1 (5 runs)
+run 0: 571604 ops/s (5716099 ok in 10.00 s)  get p50 1.6 µs p95 2.3 µs p99 3.0 µs max 268.6 µs
+run 1: 627632 ops/s (6276426 ok in 10.00 s)  get p50 1.5 µs p95 2.0 µs p99 2.7 µs max 276.5 µs
+run 2: 655339 ops/s (6553497 ok in 10.00 s)  get p50 1.4 µs p95 1.9 µs p99 2.6 µs max 210.9 µs
+run 3: 648724 ops/s (6487291 ok in 10.00 s)  get p50 1.4 µs p95 1.9 µs p99 2.5 µs max 174.8 µs
+run 4: 675593 ops/s (6755958 ok in 10.00 s)  get p50 1.4 µs p95 1.8 µs p99 2.3 µs max 203.7 µs
+| engine-readrandom-always-c1 | engine | readrandom | always | 1 | 5 | 648724 (571604–675593) | 1.4 µs / 1.9 µs / 2.6 µs | - | - | 276.5 µs | 0 / 0 |
++ target/release/forgekv-bench --runs 5 --warmup-secs 3 --duration-secs 10 --seed 42 --key-size 16 --value-size 100 --dir bench-results/tmp --out bench-results/20261026T160449Z --mode engine --keys 200000 --workload readrandom --sync always --threads 4
+wrote bench-results/20261026T160449Z/20261026T161338Z-engine-readrandom-always-c4.json
+== engine-readrandom-always-c4 (5 runs)
+run 0: 2145333 ops/s (21453803 ok in 10.00 s)  get p50 1.7 µs p95 2.6 µs p99 3.2 µs max 1.77 ms
+run 1: 2239359 ops/s (22393997 ok in 10.00 s)  get p50 1.7 µs p95 2.2 µs p99 2.9 µs max 260.9 µs
+run 2: 2292108 ops/s (22921388 ok in 10.00 s)  get p50 1.6 µs p95 2.1 µs p99 2.6 µs max 242.7 µs
+run 3: 2222892 ops/s (22229337 ok in 10.00 s)  get p50 1.6 µs p95 2.2 µs p99 3.5 µs max 358.6 µs
+run 4: 2236751 ops/s (22368132 ok in 10.00 s)  get p50 1.7 µs p95 2.1 µs p99 2.7 µs max 213.8 µs
+| engine-readrandom-always-c4 | engine | readrandom | always | 4 | 5 | 2236751 (2145333–2292108) | 1.7 µs / 2.2 µs / 2.9 µs | - | - | 1.77 ms | 0 / 0 |
++ target/release/forgekv-bench --runs 5 --warmup-secs 3 --duration-secs 10 --seed 42 --key-size 16 --value-size 100 --dir bench-results/tmp --out bench-results/20261026T160449Z --mode engine --keys 200000 --workload readrandom --sync always --threads 8
+wrote bench-results/20261026T160449Z/20261026T161448Z-engine-readrandom-always-c8.json
+== engine-readrandom-always-c8 (5 runs)
+run 0: 2966063 ops/s (29661190 ok in 10.00 s)  get p50 2.4 µs p95 3.7 µs p99 4.2 µs max 1.60 ms
+run 1: 2935217 ops/s (29352512 ok in 10.00 s)  get p50 2.4 µs p95 3.7 µs p99 4.2 µs max 2.04 ms
+run 2: 3027922 ops/s (30279937 ok in 10.00 s)  get p50 2.3 µs p95 3.7 µs p99 4.1 µs max 2.71 ms
+run 3: 2872771 ops/s (28728843 ok in 10.00 s)  get p50 2.5 µs p95 3.8 µs p99 4.3 µs max 2.51 ms
+run 4: 3081835 ops/s (30818905 ok in 10.00 s)  get p50 2.2 µs p95 3.6 µs p99 4.0 µs max 2.21 ms
+| engine-readrandom-always-c8 | engine | readrandom | always | 8 | 5 | 2966063 (2872771–3081835) | 2.4 µs / 3.7 µs / 4.2 µs | - | - | 2.71 ms | 0 / 0 |
++ target/release/forgekv-bench --runs 5 --warmup-secs 3 --duration-secs 10 --seed 42 --key-size 16 --value-size 100 --dir bench-results/tmp --out bench-results/20261026T160449Z --mode engine --keys 1000000 --workload readrandom --sync always --threads 4 --name engine-readrandom-always-c4-k1M
+wrote bench-results/20261026T160449Z/20261026T161559Z-engine-readrandom-always-c4-k1M.json
+== engine-readrandom-always-c4-k1M (5 runs)
+run 0: 1709200 ops/s (17092278 ok in 10.00 s)  get p50 2.2 µs p95 3.0 µs p99 4.0 µs max 308.9 µs
+run 1: 1791619 ops/s (17916305 ok in 10.00 s)  get p50 2.1 µs p95 2.7 µs p99 3.5 µs max 395.0 µs
+run 2: 1531631 ops/s (15316448 ok in 10.00 s)  get p50 2.3 µs p95 3.8 µs p99 4.8 µs max 3.03 ms
+run 3: 1733647 ops/s (17336570 ok in 10.00 s)  get p50 2.1 µs p95 3.2 µs p99 3.9 µs max 1.03 ms
+run 4: 1818341 ops/s (18183740 ok in 10.00 s)  get p50 2.0 µs p95 2.6 µs p99 3.4 µs max 3.03 ms
+| engine-readrandom-always-c4-k1M | engine | readrandom | always | 4 | 5 | 1733647 (1531631–1818341) | 2.1 µs / 3.0 µs / 3.9 µs | - | - | 3.03 ms | 0 / 0 |
++ target/release/forgekv-bench --runs 5 --warmup-secs 3 --duration-secs 10 --seed 42 --key-size 16 --value-size 100 --dir bench-results/tmp --out bench-results/20261026T160449Z --mode engine --keys 200000 --workload readwrite --read-pct 90 --sync always --threads 4
+wrote bench-results/20261026T160449Z/20261026T161713Z-engine-readwrite90-always-c4.json
+== engine-readwrite90-always-c4 (5 runs)
+run 0: 3242 ops/s (32455 ok in 10.01 s)  get p50 7.4 µs p95 21.9 µs p99 41.6 µs max 1.57 ms  put p50 10.07 ms p95 37.86 ms p99 59.63 ms max 174.20 ms
+run 1: 2995 ops/s (29987 ok in 10.01 s)  get p50 4.9 µs p95 14.3 µs p99 23.3 µs max 196.2 µs  put p50 12.67 ms p95 41.07 ms p99 69.86 ms max 146.50 ms
+run 2: 2917 ops/s (29208 ok in 10.01 s)  get p50 5.0 µs p95 14.5 µs p99 24.2 µs max 135.5 µs  put p50 12.36 ms p95 45.14 ms p99 78.88 ms max 171.20 ms
+run 3: 3232 ops/s (32345 ok in 10.01 s)  get p50 8.1 µs p95 24.1 µs p99 44.0 µs max 245.7 µs  put p50 9.75 ms p95 39.79 ms p99 63.99 ms max 137.58 ms
+run 4: 3614 ops/s (36179 ok in 10.01 s)  get p50 5.8 µs p95 17.2 µs p99 31.7 µs max 209.8 µs  put p50 8.17 ms p95 36.61 ms p99 62.52 ms max 113.49 ms
+| engine-readwrite90-always-c4 | engine | readwrite 90% get | always | 4 | 5 | 3232 (2917–3614) | 5.8 µs / 17.2 µs / 31.7 µs | 10.07 ms / 39.79 ms / 63.99 ms | - | 174.20 ms | 0 / 0 |
++ target/release/forgekv-bench --runs 5 --warmup-secs 3 --duration-secs 10 --seed 42 --key-size 16 --value-size 100 --dir bench-results/tmp --out bench-results/20261026T160449Z --mode engine --keys 200000 --workload readwrite --read-pct 90 --sync never --threads 4
+wrote bench-results/20261026T160449Z/20261026T161820Z-engine-readwrite90-never-c4.json
+== engine-readwrite90-never-c4 (5 runs)
+run 0: 960124 ops/s (9601349 ok in 10.00 s)  get p50 3.7 µs p95 7.9 µs p99 11.4 µs max 5.36 ms  put p50 1.5 µs p95 3.5 µs p99 7.1 µs max 23.42 ms
+run 1: 946735 ops/s (9467390 ok in 10.00 s)  get p50 3.7 µs p95 8.0 µs p99 11.5 µs max 6.97 ms  put p50 1.5 µs p95 3.5 µs p99 7.1 µs max 26.32 ms
+run 2: 981122 ops/s (9811392 ok in 10.00 s)  get p50 3.6 µs p95 7.8 µs p99 10.9 µs max 3.88 ms  put p50 1.5 µs p95 3.4 µs p99 6.3 µs max 20.60 ms
+run 3: 927882 ops/s (9278918 ok in 10.00 s)  get p50 3.8 µs p95 8.7 µs p99 12.7 µs max 6.55 ms  put p50 1.6 µs p95 3.8 µs p99 8.1 µs max 13.92 ms
+run 4: 955921 ops/s (9559278 ok in 10.00 s)  get p50 3.8 µs p95 8.2 µs p99 11.2 µs max 7.15 ms  put p50 1.6 µs p95 3.7 µs p99 7.4 µs max 10.96 ms
+| engine-readwrite90-never-c4 | engine | readwrite 90% get | never | 4 | 5 | 955921 (927882–981122) | 3.7 µs / 8.0 µs / 11.4 µs | 1.5 µs / 3.5 µs / 7.1 µs | - | 26.32 ms | 0 / 0 |
++ target/release/forgekv-bench --runs 5 --warmup-secs 3 --duration-secs 10 --seed 42 --key-size 16 --value-size 100 --dir bench-results/tmp --out bench-results/20261026T160449Z --mode engine --keys 200000 --workload readwrite --read-pct 50 --sync always --threads 4
+wrote bench-results/20261026T160449Z/20261026T161929Z-engine-readwrite50-always-c4.json
+== engine-readwrite50-always-c4 (5 runs)
+run 0: 707 ops/s (7075 ok in 10.01 s)  get p50 14.0 µs p95 41.5 µs p99 70.9 µs max 171.4 µs  put p50 3.21 ms p95 46.02 ms p99 214.96 ms max 733.55 ms
+run 1: 715 ops/s (7161 ok in 10.01 s)  get p50 12.2 µs p95 38.1 µs p99 50.9 µs max 227.7 µs  put p50 3.15 ms p95 58.37 ms p99 164.01 ms max 439.34 ms
+run 2: 520 ops/s (5205 ok in 10.01 s)  get p50 18.5 µs p95 49.0 µs p99 60.0 µs max 301.3 µs  put p50 3.79 ms p95 52.69 ms p99 317.48 ms max 1.68 s
+run 3: 590 ops/s (5907 ok in 10.01 s)  get p50 17.1 µs p95 47.9 µs p99 59.3 µs max 229.3 µs  put p50 3.57 ms p95 36.13 ms p99 269.73 ms max 2.47 s
+run 4: 575 ops/s (5757 ok in 10.01 s)  get p50 14.6 µs p95 43.6 µs p99 56.1 µs max 212.7 µs  put p50 3.51 ms p95 46.98 ms p99 258.03 ms max 1.53 s
+| engine-readwrite50-always-c4 | engine | readwrite 50% get | always | 4 | 5 | 590 (520–715) | 14.6 µs / 43.6 µs / 59.3 µs | 3.51 ms / 46.98 ms / 258.03 ms | - | 2.47 s | 0 / 0 |
++ target/release/forgekv-bench --runs 5 --warmup-secs 3 --duration-secs 10 --seed 42 --key-size 16 --value-size 100 --dir bench-results/tmp --out bench-results/20261026T160449Z --mode engine --keys 200000 --workload readwrite --read-pct 50 --sync never --threads 4
+wrote bench-results/20261026T160449Z/20261026T162036Z-engine-readwrite50-never-c4.json
+== engine-readwrite50-never-c4 (5 runs)
+run 0: 588507 ops/s (5911884 ok in 10.05 s)  get p50 5.8 µs p95 12.1 µs p99 16.1 µs max 6.60 ms  put p50 2.3 µs p95 11.1 µs p99 17.6 µs max 91.67 ms
+run 1: 622581 ops/s (6225932 ok in 10.00 s)  get p50 5.6 µs p95 11.3 µs p99 14.8 µs max 9.58 ms  put p50 2.3 µs p95 10.5 µs p99 16.2 µs max 95.29 ms
+run 2: 612788 ops/s (6128048 ok in 10.00 s)  get p50 5.5 µs p95 11.3 µs p99 14.5 µs max 6.40 ms  put p50 2.2 µs p95 10.5 µs p99 16.1 µs max 90.81 ms
+run 3: 616925 ops/s (6186520 ok in 10.03 s)  get p50 5.4 µs p95 10.6 µs p99 14.2 µs max 9.11 ms  put p50 2.2 µs p95 10.2 µs p99 15.6 µs max 100.29 ms
+run 4: 611019 ops/s (6110290 ok in 10.00 s)  get p50 5.5 µs p95 10.7 µs p99 14.3 µs max 9.50 ms  put p50 2.2 µs p95 10.0 µs p99 15.6 µs max 98.80 ms
+| engine-readwrite50-never-c4 | engine | readwrite 50% get | never | 4 | 5 | 612788 (588507–622581) | 5.5 µs / 11.3 µs / 14.5 µs | 2.2 µs / 10.5 µs / 16.1 µs | - | 100.29 ms | 0 / 0 |
++ target/release/forgekv-bench --runs 5 --warmup-secs 3 --duration-secs 10 --seed 42 --key-size 16 --value-size 100 --dir bench-results/tmp --out bench-results/20261026T160449Z --mode engine --keys 200000 --workload deleteheavy --sync never --threads 4
+wrote bench-results/20261026T160449Z/20261026T162144Z-engine-deleteheavy-never-c4.json
+== engine-deleteheavy-never-c4 (5 runs)
+run 0: 536164 ops/s (5361696 ok in 10.00 s)  get p50 5.7 µs p95 13.9 µs p99 18.4 µs max 4.24 ms  put p50 2.5 µs p95 17.4 µs p99 25.9 µs max 40.91 ms  delete p50 2.3 µs p95 17.2 µs p99 25.6 µs max 40.76 ms
+run 1: 580554 ops/s (5805642 ok in 10.00 s)  get p50 5.5 µs p95 13.2 µs p99 17.0 µs max 4.49 ms  put p50 2.4 µs p95 16.0 µs p99 22.9 µs max 43.30 ms  delete p50 2.2 µs p95 15.8 µs p99 22.7 µs max 43.04 ms
+run 2: 557121 ops/s (5571249 ok in 10.00 s)  get p50 5.8 µs p95 14.9 µs p99 19.4 µs max 4.34 ms  put p50 2.6 µs p95 19.6 µs p99 29.9 µs max 34.19 ms  delete p50 2.4 µs p95 19.4 µs p99 29.6 µs max 34.33 ms
+run 3: 528006 ops/s (5286137 ok in 10.01 s)  get p50 5.5 µs p95 13.7 µs p99 18.3 µs max 3.77 ms  put p50 2.5 µs p95 17.5 µs p99 26.7 µs max 35.32 ms  delete p50 2.3 µs p95 17.3 µs p99 26.4 µs max 35.35 ms
+run 4: 521784 ops/s (5217892 ok in 10.00 s)  get p50 5.8 µs p95 14.8 µs p99 19.1 µs max 4.73 ms  put p50 2.5 µs p95 18.4 µs p99 27.6 µs max 44.73 ms  delete p50 2.4 µs p95 18.2 µs p99 27.4 µs max 44.80 ms
+| engine-deleteheavy-never-c4 | engine | deleteheavy | never | 4 | 5 | 536164 (521784–580554) | 5.7 µs / 13.9 µs / 18.4 µs | 2.5 µs / 17.5 µs / 26.7 µs | 2.3 µs / 17.3 µs / 26.4 µs | 44.80 ms | 0 / 0 |
++ target/release/forgekv-bench --runs 5 --warmup-secs 3 --duration-secs 10 --seed 42 --key-size 16 --value-size 100 --dir bench-results/tmp --out bench-results/20261026T160449Z --mode server --keys 200000 --workload readwrite --read-pct 50 --sync never --clients 1
+wrote bench-results/20261026T160449Z/20261026T162252Z-server-readwrite50-never-c1.json
+== server-readwrite50-never-c1 (5 runs)
+run 0: 36922 ops/s (369274 ok in 10.00 s)  get p50 22.8 µs p95 52.5 µs p99 82.1 µs max 4.02 ms  put p50 19.5 µs p95 46.4 µs p99 72.8 µs max 18.91 ms
+run 1: 32669 ops/s (326706 ok in 10.00 s)  get p50 25.5 µs p95 61.4 µs p99 96.1 µs max 2.04 ms  put p50 20.6 µs p95 54.9 µs p99 87.6 µs max 17.58 ms
+run 2: 30144 ops/s (301454 ok in 10.00 s)  get p50 28.5 µs p95 63.4 µs p99 107.9 µs max 2.56 ms  put p50 22.4 µs p95 55.8 µs p99 96.8 µs max 18.27 ms
+run 3: 36353 ops/s (363539 ok in 10.00 s)  get p50 23.3 µs p95 51.7 µs p99 78.4 µs max 5.47 ms  put p50 19.8 µs p95 44.8 µs p99 68.9 µs max 10.66 ms
+run 4: 48811 ops/s (488155 ok in 10.00 s)  get p50 20.2 µs p95 34.7 µs p99 48.4 µs max 3.02 ms  put p50 17.1 µs p95 32.4 µs p99 41.2 µs max 10.54 ms
+| server-readwrite50-never-c1 | server | readwrite 50% get | never | 1 | 5 | 36353 (30144–48811) | 23.3 µs / 52.5 µs / 82.1 µs | 19.8 µs / 46.4 µs / 72.8 µs | - | 18.91 ms | 0 / 0 |
++ target/release/forgekv-bench --runs 5 --warmup-secs 3 --duration-secs 10 --seed 42 --key-size 16 --value-size 100 --dir bench-results/tmp --out bench-results/20261026T160449Z --mode server --keys 200000 --workload readwrite --read-pct 50 --sync never --clients 8
+wrote bench-results/20261026T160449Z/20261026T162359Z-server-readwrite50-never-c8.json
+== server-readwrite50-never-c8 (5 runs)
+run 0: 179679 ops/s (1797758 ok in 10.01 s)  get p50 40.2 µs p95 78.1 µs p99 128.2 µs max 5.57 ms  put p50 36.8 µs p95 72.0 µs p99 126.0 µs max 11.14 ms
+run 1: 178034 ops/s (1781192 ok in 10.00 s)  get p50 40.2 µs p95 81.9 µs p99 133.2 µs max 5.48 ms  put p50 36.8 µs p95 75.5 µs p99 128.7 µs max 17.71 ms
+run 2: 183846 ops/s (1839823 ok in 10.01 s)  get p50 39.7 µs p95 74.2 µs p99 128.8 µs max 5.56 ms  put p50 36.3 µs p95 68.8 µs p99 125.3 µs max 11.36 ms
+run 3: 163758 ops/s (1638846 ok in 10.01 s)  get p50 41.4 µs p95 99.0 µs p99 151.6 µs max 4.00 ms  put p50 37.7 µs p95 90.5 µs p99 146.9 µs max 21.69 ms
+run 4: 163529 ops/s (1636406 ok in 10.01 s)  get p50 41.5 µs p95 97.6 µs p99 157.9 µs max 4.43 ms  put p50 37.8 µs p95 89.3 µs p99 153.4 µs max 21.26 ms
+| server-readwrite50-never-c8 | server | readwrite 50% get | never | 8 | 5 | 178034 (163529–183846) | 40.2 µs / 81.9 µs / 133.2 µs | 36.8 µs / 75.5 µs / 128.7 µs | - | 21.69 ms | 0 / 0 |
++ target/release/forgekv-bench --runs 5 --warmup-secs 3 --duration-secs 10 --seed 42 --key-size 16 --value-size 100 --dir bench-results/tmp --out bench-results/20261026T160449Z --mode server --keys 200000 --workload readwrite --read-pct 50 --sync never --clients 32
+wrote bench-results/20261026T160449Z/20261026T162506Z-server-readwrite50-never-c32.json
+== server-readwrite50-never-c32 (5 runs)
+run 0: 195432 ops/s (1955635 ok in 10.01 s)  get p50 125.9 µs p95 316.3 µs p99 669.6 µs max 6.67 ms  put p50 125.6 µs p95 321.0 µs p99 725.7 µs max 23.68 ms
+run 1: 192961 ops/s (1931921 ok in 10.01 s)  get p50 130.5 µs p95 331.5 µs p99 518.3 µs max 6.21 ms  put p50 130.4 µs p95 335.4 µs p99 537.3 µs max 19.99 ms
+run 2: 196150 ops/s (1963441 ok in 10.01 s)  get p50 130.3 µs p95 319.3 µs p99 490.2 µs max 6.21 ms  put p50 130.1 µs p95 322.9 µs p99 509.2 µs max 19.32 ms
+run 3: 204816 ops/s (2048890 ok in 10.00 s)  get p50 130.5 µs p95 294.8 µs p99 431.6 µs max 6.36 ms  put p50 130.4 µs p95 297.9 µs p99 444.0 µs max 18.22 ms
+run 4: 207835 ops/s (2079619 ok in 10.01 s)  get p50 130.3 µs p95 285.9 µs p99 409.6 µs max 6.33 ms  put p50 130.3 µs p95 288.8 µs p99 419.8 µs max 18.05 ms
+| server-readwrite50-never-c32 | server | readwrite 50% get | never | 32 | 5 | 196150 (192961–207835) | 130.3 µs / 316.3 µs / 490.2 µs | 130.3 µs / 321.0 µs / 509.2 µs | - | 23.68 ms | 0 / 0 |
++ target/release/forgekv-bench --runs 5 --warmup-secs 3 --duration-secs 10 --seed 42 --key-size 16 --value-size 100 --dir bench-results/tmp --out bench-results/20261026T160449Z --mode server --keys 200000 --workload readwrite --read-pct 50 --sync always --clients 8
+wrote bench-results/20261026T160449Z/20261026T162614Z-server-readwrite50-always-c8.json
+== server-readwrite50-always-c8 (5 runs)
+run 0: 917 ops/s (9193 ok in 10.03 s)  get p50 324.8 µs p95 657.6 µs p99 781.6 µs max 1.05 ms  put p50 22.94 ms p95 32.73 ms p99 34.76 ms max 48.14 ms
+run 1: 502 ops/s (5040 ok in 10.03 s)  get p50 454.2 µs p95 733.7 µs p99 850.8 µs max 1.07 ms  put p50 31.30 ms p95 33.70 ms p99 34.94 ms max 56.19 ms
+run 2: 498 ops/s (4991 ok in 10.03 s)  get p50 471.7 µs p95 751.4 µs p99 875.1 µs max 1.14 ms  put p50 31.55 ms p95 34.18 ms p99 35.93 ms max 56.79 ms
+run 3: 512 ops/s (5137 ok in 10.03 s)  get p50 448.6 µs p95 724.5 µs p99 829.7 µs max 919.6 µs  put p50 30.79 ms p95 33.96 ms p99 38.18 ms max 55.48 ms
+run 4: 744 ops/s (7440 ok in 10.01 s)  get p50 364.1 µs p95 674.5 µs p99 799.9 µs max 1.07 ms  put p50 24.35 ms p95 32.17 ms p99 34.10 ms max 56.81 ms
+| server-readwrite50-always-c8 | server | readwrite 50% get | always | 8 | 5 | 512 (498–917) | 448.6 µs / 724.5 µs / 829.7 µs | 30.79 ms / 33.70 ms / 34.94 ms | - | 56.81 ms | 0 / 0 |
++ target/release/forgekv-bench --runs 5 --warmup-secs 3 --duration-secs 10 --seed 42 --key-size 16 --value-size 100 --dir bench-results/tmp --out bench-results/20261026T160449Z --mode server --keys 200000 --workload readrandom --sync always --clients 8
+wrote bench-results/20261026T160449Z/20261026T162721Z-server-readrandom-always-c8.json
+== server-readrandom-always-c8 (5 runs)
+run 0: 220940 ops/s (2210713 ok in 10.01 s)  get p50 34.1 µs p95 50.6 µs p99 92.9 µs max 2.21 ms
+run 1: 221345 ops/s (2215278 ok in 10.01 s)  get p50 34.3 µs p95 49.9 µs p99 85.2 µs max 906.4 µs
+run 2: 221349 ops/s (2215655 ok in 10.01 s)  get p50 34.2 µs p95 49.6 µs p99 89.1 µs max 788.0 µs
+run 3: 217540 ops/s (2175921 ok in 10.00 s)  get p50 34.4 µs p95 51.8 µs p99 104.4 µs max 2.86 ms
+run 4: 221258 ops/s (2214310 ok in 10.01 s)  get p50 34.2 µs p95 49.8 µs p99 88.0 µs max 1.70 ms
+| server-readrandom-always-c8 | server | readrandom | always | 8 | 5 | 221258 (217540–221349) | 34.2 µs / 49.9 µs / 89.1 µs | - | - | 2.86 ms | 0 / 0 |
++ target/release/forgekv-bench --runs 5 --warmup-secs 3 --duration-secs 10 --seed 42 --key-size 16 --value-size 100 --dir bench-results/tmp --out bench-results/20261026T160449Z --mode recovery --keys 100000 --memtable-bytes 67108864 --sync always
+wrote bench-results/20261026T160449Z/20261026T162828Z-recovery-k100000-m67108864.json
+== recovery-k100000-m67108864 (5 runs)
+run 0: open 94.4 ms, replayed 100000 records from 1 WAL file(s) (13.1 MiB), 0 SST before
+run 1: open 94.6 ms, replayed 100000 records from 1 WAL file(s) (13.1 MiB), 0 SST before
+run 2: open 95.1 ms, replayed 100000 records from 1 WAL file(s) (13.1 MiB), 0 SST before
+run 3: open 95.6 ms, replayed 100000 records from 1 WAL file(s) (13.1 MiB), 0 SST before
+run 4: open 95.0 ms, replayed 100000 records from 1 WAL file(s) (13.1 MiB), 0 SST before
+| recovery-k100000-m67108864 | 100000 | always | 64.0 | 13.1 | 0 | 5 | 95.0 (94.4–95.6) | 100000 | true |
++ target/release/forgekv-bench --runs 5 --warmup-secs 3 --duration-secs 10 --seed 42 --key-size 16 --value-size 100 --dir bench-results/tmp --out bench-results/20261026T160449Z --mode recovery --keys 300000 --memtable-bytes 67108864 --sync always
+wrote bench-results/20261026T160449Z/20261026T162830Z-recovery-k300000-m67108864.json
+== recovery-k300000-m67108864 (5 runs)
+run 0: open 316.5 ms, replayed 300000 records from 1 WAL file(s) (39.2 MiB), 0 SST before
+run 1: open 324.9 ms, replayed 300000 records from 1 WAL file(s) (39.2 MiB), 0 SST before
+run 2: open 328.4 ms, replayed 300000 records from 1 WAL file(s) (39.2 MiB), 0 SST before
+run 3: open 320.1 ms, replayed 300000 records from 1 WAL file(s) (39.2 MiB), 0 SST before
+run 4: open 325.7 ms, replayed 300000 records from 1 WAL file(s) (39.2 MiB), 0 SST before
+| recovery-k300000-m67108864 | 300000 | always | 64.0 | 39.2 | 0 | 5 | 324.9 (316.5–328.4) | 300000 | true |
++ target/release/forgekv-bench --runs 5 --warmup-secs 3 --duration-secs 10 --seed 42 --key-size 16 --value-size 100 --dir bench-results/tmp --out bench-results/20261026T160449Z --mode recovery --keys 1000000 --sync always
+wrote bench-results/20261026T160449Z/20261026T162833Z-recovery-k1000000-m4194304.json
+== recovery-k1000000-m4194304 (5 runs)
+run 0: open 31.4 ms, replayed 15362 records from 1 WAL file(s) (2.0 MiB), 39 SST before
+run 1: open 33.4 ms, replayed 15362 records from 1 WAL file(s) (2.0 MiB), 39 SST before
+run 2: open 31.7 ms, replayed 15362 records from 1 WAL file(s) (2.0 MiB), 39 SST before
+run 3: open 29.6 ms, replayed 15362 records from 1 WAL file(s) (2.0 MiB), 39 SST before
+run 4: open 29.4 ms, replayed 15362 records from 1 WAL file(s) (2.0 MiB), 39 SST before
+| recovery-k1000000-m4194304 | 1000000 | always | 4.0 | 2.0 | 39 | 5 | 31.4 (29.4–33.4) | 15362 | true |
++ target/release/forgekv-bench --runs 5 --warmup-secs 3 --duration-secs 10 --seed 42 --key-size 16 --value-size 100 --dir bench-results/tmp --out bench-results/20261026T160449Z --mode fsync --threads 1 --name fsync-probe-end
+wrote bench-results/20261026T160449Z/20261026T162851Z-fsync-probe-end.json
+== fsync-probe-end (5 runs)
+run 0: 537 ops/s (5368 ok in 10.00 s)  put p50 663.1 µs p95 3.98 ms p99 4.25 ms max 9.69 ms
+run 1: 262 ops/s (2623 ok in 10.00 s)  put p50 3.83 ms p95 4.13 ms p99 4.34 ms max 8.64 ms
+run 2: 260 ops/s (2603 ok in 10.00 s)  put p50 3.85 ms p95 4.16 ms p99 4.38 ms max 6.58 ms
+run 3: 259 ops/s (2591 ok in 10.00 s)  put p50 3.86 ms p95 4.22 ms p99 4.58 ms max 8.77 ms
+run 4: 535 ops/s (5349 ok in 10.00 s)  put p50 690.6 µs p95 4.09 ms p99 4.28 ms max 8.84 ms
+| fsync-probe-end | fsync | append 100 B + fdatasync | always | 1 | 5 | 262 (259–537) | - | 3.83 ms / 4.13 ms / 4.34 ms | - | 9.69 ms | 0 / 0 |
