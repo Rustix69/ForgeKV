@@ -8,8 +8,8 @@
 | `bench-results/20261026T160449Z/` | `crc32:0f6f6c76 over 30 files` — the Phase 7 source (before the FIFO writer lock, the reserved-header check and the stall counters) | kept for provenance; describes **old code**, used only in the comparison section |
 
 **The code has changed since that session** (fingerprint now
-`crc32:446a43bc over 31 files`), and it has **not** been re-benchmarked.
-It differs from the benchmarked source in three ways:
+`crc32:0b8568d7 over 31 files`), and it has **not** been re-benchmarked.
+It differs from the benchmarked source in four ways:
 
 - The post-Phase 8 directory-lock fix: `src/fs.rs` (`DirLock`, which calls
   `flock(LOCK_UN)` when a database is dropped), `src/engine.rs` (the lock
@@ -22,6 +22,12 @@ It differs from the benchmarked source in three ways:
 - Documentation comments in `src/` (references to a removed planning
   document replaced or dropped, and two doc links to feature-gated test
   methods turned into plain text); no code changed.
+- Audit follow-ups: the WAL writer records the offset covered by the last
+  successful sync (one integer store per sync, on the timed path of
+  `SyncMode::Always` writes), `Drop for Db` reports a failed shutdown on
+  stderr, and the server logs and counts connections that end mid-frame.
+  The last two only run on abnormal paths. The extra store is expected to
+  be negligible next to an `fdatasync`, but this was not measured.
 
 So the numbers below are expected to carry over, but strictly they
 describe `crc32:bbce3c06`.

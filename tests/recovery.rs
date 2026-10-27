@@ -402,6 +402,7 @@ fn recovery_is_deterministic_and_idempotent() {
 }
 
 /// Copy every regular file of `from` into the (existing) directory `to`.
+#[cfg(feature = "failpoints")]
 fn copy_files(from: &Path, to: &Path) {
     for e in fs::read_dir(from).unwrap() {
         let e = e.unwrap();
@@ -411,6 +412,7 @@ fn copy_files(from: &Path, to: &Path) {
     }
 }
 
+#[cfg(feature = "failpoints")]
 fn the_wal(dir: &Path) -> PathBuf {
     let wals: Vec<PathBuf> = fs::read_dir(dir)
         .unwrap()
@@ -422,13 +424,14 @@ fn the_wal(dir: &Path) -> PathBuf {
 }
 
 /// Phase 8: simulated loss of unsynced WAL data (what a power loss could
-/// leave under `SyncMode::Never`). Batch A is flushed to an SST (synced);
-/// the flush rotates to a new WAL whose header is synced when it is created
-/// (`Wal::create`). Batch B is then written with no further sync, so the
-/// synced offset of the live WAL is its header and the written offset is
-/// its length. Truncating the live WAL anywhere between the two must
-/// recover A plus exactly the B operations whose records are complete:
-/// a consistent prefix, never an error and never a partial record.
+/// leave under `SyncMode::Never`). Batch A is flushed to an SST (synced) and
+/// the flush rotates to a new WAL. Batch B is then written without a sync.
+/// The engine reports the live WAL's synced and written offsets
+/// (`Db::wal_offsets`, feature `failpoints`); truncating the WAL anywhere
+/// between the two must recover A plus exactly the B operations whose
+/// records are complete: a consistent prefix, never an error and never a
+/// partial record.
+#[cfg(feature = "failpoints")]
 #[test]
 fn losing_unsynced_wal_bytes_recovers_a_consistent_prefix() {
     use std::collections::BTreeMap;
@@ -449,15 +452,16 @@ fn losing_unsynced_wal_bytes_recovers_a_consistent_prefix() {
     }
     db.flush().unwrap();
     let wal = the_wal(live.path());
-    let synced = fs::metadata(&wal).unwrap().len();
+    let at_rotation = db.wal_offsets().unwrap();
     assert_eq!(
-        synced, HEADER_LEN,
-        "only the header is synced after rotation"
+        (at_rotation.written, at_rotation.synced),
+        (HEADER_LEN, HEADER_LEN),
+        "a new WAL holds only its synced header"
     );
     // Batch B; `states[j]` is the model after j operations, `ends[j]` the
-    // WAL length after them.
+    // written offset after them (checked against the file length).
     let mut states = vec![model.clone()];
-    let mut ends = vec![synced];
+    let mut ends = vec![at_rotation.written];
     let mut x = 0x2545_F491_4F6C_DD1Du64;
     for j in 0..300u64 {
         x ^= x << 13;
@@ -473,8 +477,19 @@ fn losing_unsynced_wal_bytes_recovers_a_consistent_prefix() {
             model.insert(k, v);
         }
         states.push(model.clone());
-        ends.push(fs::metadata(&wal).unwrap().len());
+        let off = db.wal_offsets().unwrap();
+        assert_eq!(
+            off.wal_number, at_rotation.wal_number,
+            "no rotation during B"
+        );
+        assert_eq!(off.written, fs::metadata(&wal).unwrap().len());
+        assert_eq!(
+            off.synced, at_rotation.synced,
+            "SyncMode::Never: nothing synced"
+        );
+        ends.push(off.written);
     }
+    let synced = at_rotation.synced;
     // The state on disk at this instant (page cache included).
     let snapshot = TempDir::new().unwrap();
     copy_files(live.path(), snapshot.path());
@@ -515,4 +530,53 @@ fn losing_unsynced_wal_bytes_recovers_a_consistent_prefix() {
         }
         db.check_invariants().unwrap();
     }
+}
+
+/// The engine's synced offset follows the documented sync points: every
+/// write under `SyncMode::Always`; under `SyncMode::Never` only the header
+/// of a new WAL, the sealed WAL at rotation, and `shutdown`.
+#[cfg(feature = "failpoints")]
+#[test]
+fn wal_offsets_track_the_sync_points() {
+    use forgekv::SyncMode;
+    let wal_len = |dir: &Path| fs::metadata(the_wal(dir)).unwrap().len();
+
+    let dir = TempDir::new().unwrap();
+    let opts = Options {
+        sync_mode: SyncMode::Always,
+        ..Options::default()
+    };
+    let db = Db::open(dir.path(), opts).unwrap();
+    let o = db.wal_offsets().unwrap();
+    assert_eq!((o.written, o.synced), (HEADER_LEN, HEADER_LEN));
+    db.put(b"k", b"v").unwrap();
+    let o = db.wal_offsets().unwrap();
+    assert!(o.written > HEADER_LEN);
+    assert_eq!(o.synced, o.written, "Always: synced before the ack");
+    assert_eq!(o.written, wal_len(dir.path()));
+    drop(db);
+
+    let dir = TempDir::new().unwrap();
+    let opts = Options {
+        sync_mode: SyncMode::Never,
+        ..Options::default()
+    };
+    let db = Db::open(dir.path(), opts).unwrap();
+    db.put(b"k", b"v").unwrap();
+    let before = db.wal_offsets().unwrap();
+    assert_eq!(
+        before.synced, HEADER_LEN,
+        "Never: only the header is synced"
+    );
+    assert!(before.written > before.synced);
+    db.flush().unwrap(); // seals and syncs the old WAL, starts a new one
+    let rotated = db.wal_offsets().unwrap();
+    assert_ne!(rotated.wal_number, before.wal_number);
+    assert_eq!((rotated.written, rotated.synced), (HEADER_LEN, HEADER_LEN));
+    db.put(b"k2", b"v2").unwrap();
+    assert_eq!(db.wal_offsets().unwrap().synced, HEADER_LEN);
+    db.shutdown().unwrap(); // syncs the WAL even under Never
+    let o = db.wal_offsets().unwrap();
+    assert_eq!(o.synced, o.written);
+    assert_eq!(o.written, wal_len(dir.path()));
 }

@@ -30,6 +30,7 @@
 
 use std::future::Future;
 use std::io;
+use std::net::SocketAddr;
 use std::sync::Arc;
 use std::sync::atomic::{AtomicU64, Ordering};
 use std::time::Duration;
@@ -86,6 +87,9 @@ pub struct ServerStats {
     pub busy: AtomicU64,
     pub internal_errors: AtomicU64,
     pub timeouts: AtomicU64,
+    /// Connections that closed or failed partway through a request frame
+    /// (the partial request is dropped; timeouts are counted in `timeouts`).
+    pub partial_frames: AtomicU64,
 }
 
 impl ServerStats {
@@ -135,10 +139,10 @@ pub async fn serve(
         tokio::select! {
             () = &mut shutdown => break,
             accepted = listener.accept() => match accepted {
-                Ok((stream, _peer)) => match Arc::clone(&connections).try_acquire_owned() {
+                Ok((stream, peer)) => match Arc::clone(&connections).try_acquire_owned() {
                     Ok(permit) => {
                         ServerStats::inc(&ctx.stats.connections_accepted);
-                        tasks.spawn(connection(stream, Arc::clone(&ctx), stop_rx.clone(), permit));
+                        tasks.spawn(connection(stream, peer, Arc::clone(&ctx), stop_rx.clone(), permit));
                     }
                     Err(_) => {
                         ServerStats::inc(&ctx.stats.connections_rejected);
@@ -218,6 +222,7 @@ const READ_CHUNK: usize = 16 * 1024;
 
 async fn connection(
     stream: TcpStream,
+    peer: SocketAddr,
     ctx: Arc<Ctx>,
     mut stop: watch::Receiver<bool>,
     _permit: OwnedSemaphorePermit,
@@ -246,12 +251,25 @@ async fn connection(
             Ok(Ok(_)) => {}
         }
         // The rest of the request must arrive within `request_timeout`.
+        // At least one byte of this frame has arrived, so ending here leaves
+        // a partial request. Only the peer and the reason are logged, never
+        // request contents.
         let payload = match timeout(ctx.cfg.request_timeout, read_frame(&mut rd, max_frame)).await {
             Err(_) => {
                 ServerStats::inc(&stats.timeouts);
+                eprintln!(
+                    "forgekv-server: {peer}: request not completed within the request timeout; partial frame dropped"
+                );
                 break;
             }
-            Ok(Err(_)) => break, // disconnected mid-frame
+            Ok(Err(e)) => {
+                ServerStats::inc(&stats.partial_frames);
+                eprintln!(
+                    "forgekv-server: {peer}: connection ended mid-frame ({}); partial frame dropped",
+                    e.kind()
+                );
+                break;
+            }
             Ok(Ok(Frame::Payload(p))) => p,
             Ok(Ok(Frame::Bad(m))) => {
                 ServerStats::inc(&stats.bad_requests);

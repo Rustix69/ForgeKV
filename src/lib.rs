@@ -33,6 +33,8 @@ mod test_io;
 
 pub use compaction::CompactionStats;
 pub use config::{Options, RecoveryMode, SyncMode};
+#[cfg(feature = "failpoints")]
+pub use engine::WalOffsets;
 pub use engine::{Db, LevelSummary, RecoveryReport, Stats};
 pub use error::{Error, Result};
 pub use failpoint::FailPoints;

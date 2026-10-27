@@ -451,12 +451,14 @@ run are in [`bench-results/csv/`](bench-results/csv/README.md).
 | [`bench-results/20261026T173115Z/`](bench-results/20261026T173115Z/summary.md) | Phase 8 source, `crc32:bbce3c06` | current results |
 | [`bench-results/20261026T160449Z/`](bench-results/20261026T160449Z/summary.md) | Phase 7 source, `crc32:0f6f6c76` | historical, used for comparison |
 
-The source in this repository (`crc32:446a43bc`) differs from the Phase 8
+The source in this repository (`crc32:0b8568d7`) differs from the Phase 8
 source by the directory-lock fix (`src/fs.rs`, plus a field type in
 `src/engine.rs` and a doc comment in `src/error.rs`), which no benchmark
-times, by the `license = "MIT"` metadata field in `Cargo.toml`, and by
-documentation comments in `src/`; the last two do not affect runtime
-behaviour. The current source has not been re-benchmarked.
+times, by the `license = "MIT"` metadata field in `Cargo.toml`, by
+documentation comments in `src/`, and by small audit follow-ups (the WAL
+writer also records its synced offset, one integer store per sync, and
+failure diagnostics on abnormal paths). The current source has not been
+re-benchmarked; see [`docs/BENCHMARKS.md`](docs/BENCHMARKS.md).
 
 Phase 8 session, one laptop (Intel i5-12500H, ext4 on NVMe, Linux 7.0),
 16-byte keys, 100-byte values, 200,000 keys, medians with min–max across
@@ -512,6 +514,7 @@ all come from the Phase 8 session.
 | `tests/concurrency.rs` | concurrent readers and writers, no read gaps during flush or compaction, backpressure, shutdown, worker panics, stall counters |
 | `tests/server.rs` | protocol over TCP, malformed and oversized input, limits and timeouts, connection floods, graceful shutdown, SIGKILL of the server binary with requests in flight |
 | `tests/lock.rs` | directory-lock exclusivity across processes, release on close, exit and SIGKILL, reopening while other threads spawn processes |
+| `tests/drop_log.rs` (feature `failpoints`) | dropping a poisoned `Db` reports the failed shutdown on stderr exactly once; nothing is printed after a successful shutdown or when `close` already returned the error |
 | `tests/golden.rs` | on-disk format compatibility against `tests/data/golden-db/` |
 
 All of these simulate **process** crashes. None of them is a power-loss

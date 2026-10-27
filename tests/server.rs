@@ -302,7 +302,12 @@ async fn disconnects_mid_request_do_not_affect_other_clients() {
     // A fully sent request is executed even if the client vanished.
     let v = c.get(b"half").await.unwrap();
     assert!(v.is_none() || v == Some(b"value".to_vec()));
+    let stats = Arc::clone(&s.stats);
     s.stop().await.unwrap();
+    // After shutdown every connection has been handled: the two cuts inside
+    // a frame are counted as partial frames; the complete request and the
+    // clean EOFs between requests are not.
+    assert_eq!(ServerStats::get(&stats.partial_frames), 2);
 }
 
 #[tokio::test(flavor = "multi_thread", worker_threads = 4)]
@@ -328,6 +333,9 @@ async fn idle_and_slow_clients_are_disconnected() {
     assert_closed(&mut slow).await;
     assert!(started.elapsed() < Duration::from_secs(5));
     assert_eq!(s.stat(|x| &x.timeouts), 2);
+    // A request abandoned by timeout is counted as a timeout, not as a
+    // connection that ended mid-frame.
+    assert_eq!(s.stat(|x| &x.partial_frames), 0);
     // An active client is unaffected as long as it keeps talking.
     let mut c = s.client().await;
     for _ in 0..5 {

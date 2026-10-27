@@ -123,6 +123,12 @@ impl<S: LogSink> Wal<S> {
         self.log.good_end()
     }
 
+    /// Offset covered by the last successful sync; see
+    /// [`crate::logfile::LogWriter::synced_end`].
+    pub fn synced_end(&self) -> u64 {
+        self.log.synced_end()
+    }
+
     pub fn is_poisoned(&self) -> bool {
         self.log.is_poisoned()
     }
@@ -144,7 +150,10 @@ impl Wal<File> {
         if let Some(dir) = path.parent() {
             sync_dir(dir)?;
         }
-        Ok(Wal::from_sink(f, path, opts, HEADER_LEN))
+        let mut wal = Wal::from_sink(f, path, opts, HEADER_LEN);
+        // The header was fsynced above.
+        wal.log.assume_synced();
+        Ok(wal)
     }
 }
 

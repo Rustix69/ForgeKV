@@ -110,20 +110,32 @@ pub struct LogWriter<S: LogSink> {
     path: PathBuf,
     max_record: usize,
     good_end: u64,
+    /// End of the data covered by the last successful `sync_data` (0 if no
+    /// sync is known). Never ahead of `good_end`.
+    synced_end: u64,
     poisoned: bool,
 }
 
 impl<S: LogSink> LogWriter<S> {
     /// `good_end` is the offset just past the last fully written frame (or
     /// [`HEADER_LEN`] for a fresh log whose header is already written).
+    /// Nothing is assumed to be synced until the first successful
+    /// [`LogWriter::sync`] (see [`LogWriter::synced_end`]).
     pub fn new(sink: S, path: impl Into<PathBuf>, max_record: usize, good_end: u64) -> Self {
         LogWriter {
             sink,
             path: path.into(),
             max_record,
             good_end,
+            synced_end: 0,
             poisoned: false,
         }
+    }
+
+    /// Record that everything up to `good_end` is already synced (the caller
+    /// fsynced the file before constructing the writer).
+    pub(crate) fn assume_synced(&mut self) {
+        self.synced_end = self.good_end;
     }
 
     /// Append one frame. On an I/O error the writer is poisoned: the file may
@@ -155,7 +167,10 @@ impl<S: LogSink> LogWriter<S> {
             return Err(Error::Poisoned);
         }
         match self.sink.sync_data() {
-            Ok(()) => Ok(()),
+            Ok(()) => {
+                self.synced_end = self.good_end;
+                Ok(())
+            }
             Err(e) => {
                 self.poisoned = true;
                 Err(Error::io("sync log", &self.path, e))
@@ -165,6 +180,14 @@ impl<S: LogSink> LogWriter<S> {
 
     pub fn good_end(&self) -> u64 {
         self.good_end
+    }
+
+    /// Offset up to which the log was covered by the last successful sync:
+    /// what a power loss is designed to preserve. Bytes between this and
+    /// [`LogWriter::good_end`] were written but not yet synced. A failed sync
+    /// or append leaves it unchanged (and poisons the writer).
+    pub fn synced_end(&self) -> u64 {
+        self.synced_end
     }
 
     #[cfg(test)]
@@ -764,5 +787,44 @@ mod tests {
                 );
             }
         }
+    }
+
+    /// The synced offset advances only on a successful sync, never on an
+    /// append, and stays put when a sync fails.
+    #[test]
+    fn synced_end_follows_successful_syncs_only() {
+        let mut w = LogWriter::new(ShortSink::new(3, 0), path(), MAX, HEADER_LEN);
+        assert_eq!(w.synced_end(), 0, "nothing is assumed synced");
+        w.append(b"first").unwrap();
+        assert_eq!(w.synced_end(), 0);
+        w.sync().unwrap();
+        let synced = w.synced_end();
+        assert_eq!(synced, w.good_end());
+        w.append(b"second").unwrap();
+        assert!(w.good_end() > synced);
+        assert_eq!(w.synced_end(), synced, "an append is not a sync");
+        w.sink.fail_sync = true;
+        assert!(w.sync().is_err());
+        assert_eq!(w.synced_end(), synced, "a failed sync proves nothing");
+        assert!(w.synced_end() <= w.good_end());
+    }
+
+    /// A partially written frame moves neither offset.
+    #[test]
+    fn a_failed_append_moves_neither_offset() {
+        let first = encode_frame(b"first", MAX).unwrap();
+        let mut w = LogWriter::new(FailingSink::new(first.len() + 5), path(), MAX, HEADER_LEN);
+        w.append(b"first").unwrap();
+        w.sync().unwrap();
+        let (written, synced) = (w.good_end(), w.synced_end());
+        assert!(w.append(b"second-frame-that-does-not-fit").is_err());
+        assert_eq!((w.good_end(), w.synced_end()), (written, synced));
+    }
+
+    #[test]
+    fn assume_synced_marks_the_current_end() {
+        let mut w = LogWriter::new(ShortSink::new(8, 0), path(), MAX, HEADER_LEN);
+        w.assume_synced();
+        assert_eq!(w.synced_end(), HEADER_LEN);
     }
 }

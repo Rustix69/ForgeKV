@@ -75,7 +75,7 @@
 //! recovered on the next open.
 
 use std::fs::File;
-use std::io::BufReader;
+use std::io::{BufReader, Write};
 use std::path::{Path, PathBuf};
 use std::sync::atomic::{AtomicBool, AtomicU64, Ordering};
 use std::sync::{Arc, Condvar, Mutex, MutexGuard, RwLock};
@@ -125,6 +125,20 @@ pub struct LevelSummary {
     pub memtable_bytes: usize,
     /// `approx_bytes` of the immutable memtable waiting to be flushed.
     pub immutable_memtable_bytes: Option<usize>,
+}
+
+/// Write and sync position of the active WAL (feature `failpoints`, for
+/// tests that simulate losing unsynced data).
+#[cfg(feature = "failpoints")]
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub struct WalOffsets {
+    /// File number of the active WAL (`wal-<number>.log`).
+    pub wal_number: u64,
+    /// End of the last fully written record.
+    pub written: u64,
+    /// End of the data covered by the last successful sync. Bytes between
+    /// `synced` and `written` are not guaranteed to survive a power loss.
+    pub synced: u64,
 }
 
 /// Counters and errors that cannot be returned from the call that caused them.
@@ -275,6 +289,20 @@ impl Db {
     #[cfg(feature = "failpoints")]
     pub fn failpoints(&self) -> &FailPoints {
         &self.inner.fp
+    }
+
+    /// The active WAL's written and synced offsets (feature `failpoints`).
+    ///
+    /// # Errors
+    /// `Error::Poisoned` if a writer panicked while holding the writer lock.
+    #[cfg(feature = "failpoints")]
+    pub fn wal_offsets(&self) -> Result<WalOffsets> {
+        let w = self.inner.write.lock()?;
+        Ok(WalOffsets {
+            wal_number: w.wal_number,
+            written: w.wal.good_end(),
+            synced: w.wal.synced_end(),
+        })
     }
 
     fn open_inner(dir: &Path, opts: Options, fp: FailPoints) -> Result<Db> {
@@ -586,11 +614,24 @@ impl Db {
 
 impl Drop for Db {
     /// Best-effort shutdown so the worker thread and directory lock are
-    /// released. Errors cannot be reported from `drop`; call `close` to see
-    /// them. Acknowledged writes do not depend on this: they are already in
-    /// the WAL.
+    /// released. `drop` cannot return an error, so a failure is reported on
+    /// stderr; call `close` to handle it instead. If `shutdown` or `close`
+    /// already ran, its caller received any error, so nothing is printed.
+    /// Acknowledged writes do not depend on this: they are already in the WAL.
     fn drop(&mut self) {
-        let _ = self.shutdown();
+        let already_shut_down = self.inner.closed.load(Ordering::SeqCst);
+        if let Err(e) = self.shutdown()
+            && !already_shut_down
+        {
+            // Not `eprintln!`, which panics if stderr fails (e.g. a closed
+            // pipe): a diagnostic must never panic out of `drop`.
+            let _ = writeln!(
+                std::io::stderr(),
+                "forgekv: shutdown during drop of the database at {} failed: {e} \
+                 (call Db::close() to handle this error)",
+                self.inner.dir.display()
+            );
+        }
     }
 }
 
